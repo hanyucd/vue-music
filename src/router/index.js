@@ -12,6 +12,10 @@ export default new Router({
   mode: 'history',
   routes: [
     {
+      path: '/',
+      redirect: '/recommend'
+    },
+    {
       path: '/recommend',
       name: 'recommend',
       component: Recommend

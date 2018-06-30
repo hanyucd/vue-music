@@ -1,0 +1,25 @@
+@import '@/assets/scss/const.scss';
+
+#nav_table {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 44px;
+  line-height: 44px;
+  .nav-tab {
+    flex: 1;
+    text-align: center;
+    .nav-title {
+      color: $color-text-l;
+    }
+  }
+  .bottom-line {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 25%;
+    height: 2px;
+    background-image: linear-gradient(to right, #ec77ab 0%, #7873f5 100%);
+    transition: left .5s ease-out;
+  }
+}
