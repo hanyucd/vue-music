@@ -1,0 +1,17 @@
+@import '@/assets/scss/const.scss';
+@import '@/assets/scss/mymixin.scss';
+
+#header {
+  position: relative;
+  height: 44px;
+  text-align: center;
+  color: $color-theme;
+  background-image: linear-gradient(to right, #ec77ab 0%, #7873f5 100%);
+  font-size: 0;
+  .title {
+    display: inline-block;
+    vertical-align: top;
+    line-height: 44px;
+    font-size: $font-size-large;
+  }
+}
