@@ -1,25 +1,24 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <Header></Header>
+    <nav-table></nav-table>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
+import Header from '@/components/header/header';
+import NavTable from '@/components/nav_table/nav_table';
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    Header,
+    NavTable
+  }
 };
 </script>
 
 <style lang="scss">
-@import '@/assets/scss/index.scss';
-
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  @import '@/assets/scss/index.scss';
 </style>
