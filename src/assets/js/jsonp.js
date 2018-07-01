@@ -1,5 +1,8 @@
 import originJSONP from 'jsonp';
 
+/*
+  通过 jsonp 库来抓取 jsonp 数据请求
+*/
 export default function jsonp(url, data, option) {
   url += ((url.indexOf('?') === -1) ? '?' : '&') + param(data);
 
