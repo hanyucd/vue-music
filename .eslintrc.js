@@ -34,6 +34,8 @@ module.exports = {
     'generator-star-spacing': 'off',
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'semi': ['error', 'always']
+    'semi': ['error', 'always'],
+    'space-before-function-paren': ['error', 'never'],
+    'template-curly-spacing': ['error', 'always']
   }
 }

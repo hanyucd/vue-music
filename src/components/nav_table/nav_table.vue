@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       nav: {
         recommend: '推荐',
