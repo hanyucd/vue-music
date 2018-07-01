@@ -8,6 +8,15 @@
   color: $color-theme;
   background-image: linear-gradient(to right, #ec77ab 0%, #7873f5 100%);
   font-size: 0;
+  .icon {
+    display: inline-block;
+    width: 30px;
+    height: 32px;
+    margin: 6px 9px 0 0;
+    background: url('../../assets/img/music-icon.png') no-repeat center;
+    background-origin: content-box; // 背景图像的相对位置的内容框
+    background-size: cover; // 背景图片缩放将完全覆盖背景定位区域的 最小大小
+  }
   .title {
     display: inline-block;
     vertical-align: top;

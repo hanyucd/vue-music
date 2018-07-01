@@ -1,12 +1,13 @@
 <template>
   <header id="header">
+    <div class="icon"></div>
     <h1 class="title">VUE MUSIC</h1>
   </header>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
     };
   }
