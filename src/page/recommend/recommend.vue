@@ -25,7 +25,7 @@
 <script>
 import Slider from './slider/slider';
 
-import { getRecommend } from '@/api/recommend';
+import { getRecommend, getDiscList } from '@/api/recommend';
 import { ERROR_OK } from '@/api/config';
 
 export default {
@@ -36,6 +36,7 @@ export default {
   },
   created() {
     this._fetchRecommend();
+    this._getDiscList();
   },
   methods: {
     // 获取顶部轮播图数据
@@ -43,6 +44,13 @@ export default {
       getRecommend().then(res => {
         if (res.code === ERROR_OK) {
           this.recommends = res.data.slider;
+        }
+      });
+    },
+    _getDiscList() {
+      getDiscList().then(res => {
+        console.log(res);
+        if (res.code === ERROR_OK) {
         }
       });
     }

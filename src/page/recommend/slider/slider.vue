@@ -59,6 +59,10 @@ export default {
       });
     }, 20);
   },
+  destroyed() {
+    // 良好的习惯：销毁定时器
+    clearTimeout(this.timer);
+  },
   methods: {
     /*
       BetterScroll：横向滚动，相比纵向滚动需要 动态的 去获取滚动区的 宽度
