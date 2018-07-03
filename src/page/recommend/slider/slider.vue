@@ -121,7 +121,7 @@ export default {
         this.currentPageIndex = nowIndex;
 
         if (this.autoPlay) {
-          // 先清除掉第一次的 定时器
+          // 先清除掉上一次的 定时器 | 避免内存中存在未销毁的定时器
           clearTimeout(this.timer);
           this._play();
         }
