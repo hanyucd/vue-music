@@ -1,4 +1,5 @@
 import jsonp from '@/assets/js/jsonp';
+import axios from 'axios';
 import { commonParams, options } from './config';
 
 /**
@@ -18,13 +19,13 @@ export function getRecommend() {
 };
 
 /**
- * axios 抓取推荐页列表数据
+ * axios 抓取推荐页歌单列表数据
  * 接口：https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg
  * 接口提供方使用了 referer:https://y.qq.com/portal/playlist.html
  * axios 结合 node.js 代理后端请求
  */
 export function getDiscList() {
-  let url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg';
+  let url = '/api/getDiscList';
 
   let data = Object.assign({}, commonParams, {
     platform: 'yqq',
@@ -38,5 +39,12 @@ export function getDiscList() {
     format: 'json'
   });
 
-  return jsonp(url, data, options);
-}
+  return axios.get(url, { params: data })
+    .then(res => {
+      // 直接返回成功状态的 Promise
+      return Promise.resolve(res.data);
+    })
+    .catch(error => {
+      console.log('请求失败:', error);
+    });
+};

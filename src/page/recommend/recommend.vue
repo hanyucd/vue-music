@@ -47,10 +47,11 @@ export default {
         }
       });
     },
+    // 获取歌单列表数据
     _getDiscList() {
       getDiscList().then(res => {
-        console.log(res);
         if (res.code === ERROR_OK) {
+          console.log(res);
         }
       });
     }
