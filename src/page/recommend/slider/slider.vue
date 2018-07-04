@@ -114,7 +114,8 @@ export default {
         snap: {
           loop: self.loop, // 支持循环轮播
           threshold: 0.3, // 表示可滚动到下一个的阈值
-          speed: 500 // 滚动速率 1s
+          speed: 500, // 滚动速率 1s
+          click: true
         }
       });
       // better-scroll 监听滚动结束事件

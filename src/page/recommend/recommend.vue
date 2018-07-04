@@ -1,14 +1,14 @@
 <template>
   <div id="recommend">
-    <scroll class="recommend-content" :data="discList">
+    <scroll class="recommend-content" ref="scroll" :data="discList">
       <article>
-      <!-- 轮播图 | 当请求到 recommends 时才渲染-->
+        <!-- 轮播图 | 当请求到 recommends 时才渲染-->
         <section v-if="recommends.length" class="slider-wrapper">
           <slider>
             <!-- 插槽 -->
             <div v-for="item of recommends" :key="item.id">
               <a :src="item.linkUrl">
-                <img :src="item.picUrl" />
+                <img :src="item.picUrl" @load="loadImg" class="needsclick" alt=""/>
               </a>
             </div>
           </slider>
@@ -19,7 +19,7 @@
           <ul>
             <li class="item" v-for="(item, index) in discList" :key="index">
               <div class="icon">
-                <img :src="item.imgurl" width="60" height="60" />
+                <img v-lazy="item.imgurl" width="60" height="60" />
               </div>
               <div class="text">
                 <h2 class="name" v-html="item.creator.name"></h2>
@@ -29,6 +29,10 @@
           </ul>
         </section>
       </article>
+      <!-- loading 组件 -->
+      <article class="loading-container" v-show="!discList.length">
+        <loading></loading>
+      </article>
     </scroll>
   </div>
 </template>
@@ -36,6 +40,7 @@
 <script>
 import Slider from './slider/slider';
 import Scroll from '@/components/scroll/scroll';
+import Loading from '@/components/loading/loading';
 
 import { getRecommend, getDiscList } from '@/api/recommend';
 import { ERROR_OK } from '@/api/config';
@@ -43,7 +48,8 @@ import { ERROR_OK } from '@/api/config';
 export default {
   components: {
     Slider,
-    Scroll
+    Scroll,
+    Loading
   },
   data() {
     return {
@@ -53,7 +59,9 @@ export default {
   },
   created() {
     this._fetchRecommend();
-    this._getDiscList();
+    setTimeout(() => {
+      this._getDiscList();
+    }, 2000);
   },
   methods: {
     // 获取顶部轮播图数据
@@ -71,6 +79,13 @@ export default {
           this.discList = res.data.list;
         }
       });
+    },
+    // 当首次获取到图片时，Better-scroll 重新计算
+    loadImg() {
+      if (!this.flag) {
+        this.$refs.scroll.refresh();
+        this.flag = true;
+      }
     }
   }
 };
