@@ -10,6 +10,18 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
+/*
+ * axios 结合 Express 做后端代理请求
+ */
+const express = require('express');
+// body-parser是一个HTTP请求体解析中间件
+const bodyParser = require('body-parser');
+const axios = require('axios');
+const app = express();
+const router = express.Router();
+
+app.use('/api', router);
+
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 
@@ -42,6 +54,28 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll,
+    },
+    // 新增 后端代理请求
+    before(app) {
+      app.use(bodyParser.urlencoded({ extended: true })); // 解析文本格式
+
+      app.get('/api/getDiscList', function(req, res) {
+        let url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg';
+
+        console.log(`\n ${ __filename }: 进入歌单请求后台代理...`);
+        // 歌单列表代理
+        axios.get(url, {
+          headers: {
+            referer: 'https://c.y.qq.com',
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then(response => {
+          res.json(response.data);
+        }).catch(error => {
+          console.log('后台代理失败:', error);
+        });
+      });
     }
   },
   plugins: [
