@@ -31,7 +31,7 @@ export function getDiscList() {
     platform: 'yqq',
     hostUin: 0,
     sin: 0,
-    ein: 0,
+    ein: 20,
     sortId: 5,
     needNewCode: 0,
     categoryId: 10000000,
