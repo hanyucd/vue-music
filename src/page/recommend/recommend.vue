@@ -1,6 +1,6 @@
 <template>
   <div id="recommend">
-    <scroll class="recommend-content" :data="discList">
+    <scroll class="recommend-content" ref="scroll" :data="discList">
       <article>
       <!-- 轮播图 | 当请求到 recommends 时才渲染-->
         <section v-if="recommends.length" class="slider-wrapper">
@@ -8,7 +8,7 @@
             <!-- 插槽 -->
             <div v-for="item of recommends" :key="item.id">
               <a :src="item.linkUrl">
-                <img :src="item.picUrl" />
+                <img :src="item.picUrl" @load="loadImg" alt=""/>
               </a>
             </div>
           </slider>
@@ -71,6 +71,13 @@ export default {
           this.discList = res.data.list;
         }
       });
+    },
+    // 当首次获取到图片时，Better-scroll 重新计算
+    loadImg() {
+      if (!this.flag) {
+        this.$refs.scroll.refresh();
+        this.flag = true;
+      }
     }
   }
 };
