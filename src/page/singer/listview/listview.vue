@@ -1,10 +1,10 @@
 <template>
   <scroll id="list_view" :data="singerData">
     <ul>
-      <li class="list-group" v-for="group in singerData">
+      <li class="list-group" v-for="(group, index) in singerData" :key="index">
         <h2 class="list-group-title">{{ group.title }}</h2>
         <ul>
-          <li class="list-group-item" v-for="item of group.items">
+          <li class="list-group-item" v-for="(item, index) of group.items" :key="index">
             <img class="avatar" v-lazy="item.avatar" @click="click"/>
             <span class="name">{{ item.name }}</span>
           </li>
