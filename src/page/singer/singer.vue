@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div id="singer">
+    <list-view :singerData="singerList"></list-view>
   </div>
 </template>
 
@@ -7,11 +8,16 @@
 import { getSingerList } from '@/api/singer';
 import { ERROR_OK } from '@/api/config';
 import { createSinger } from '@/assets/js/singer';
+// 子组件
+import ListView from './listview/listview';
 
 const HOT_NAME = '热门';
 const HOT_SINGER_LEN = 10;
 
 export default {
+  components: {
+    ListView
+  },
   data() {
     return {
       singerList: []
@@ -25,12 +31,13 @@ export default {
     _fetchSingerData() {
       getSingerList().then(res => {
         if (res.code === ERROR_OK) {
-          this.singerList = res.data.list;
-          console.log(this._normalizeSinger(this.singerList));
+          this.singerList = this._normalizeSinger(res.data.list);
         }
       });
     },
-    // 重组 res.data.list 数据 | 按字母 A - Z 排列
+    /*
+     * 重组 res.data.list 数据 | 按字母 A - Z 排列
+     */
     _normalizeSinger(list) {
       let obj = {
         hot: {
@@ -56,7 +63,6 @@ export default {
         }
         obj[key].items.push(createSinger(item));
       });
-
       // 处理为 有序列表
       let hot = [];
       let other = [];
