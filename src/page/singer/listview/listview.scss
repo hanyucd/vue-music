@@ -34,4 +34,23 @@
       }
     }
   }
+  .letter-container {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    padding: 20px 0;
+    text-align: center;
+    background: $color-background-d;
+    font-family: Helvetica;
+    border-radius: 20px;
+    .item {
+      padding: 3px;
+      line-height: 1;
+      color: #fff;
+      // color: $color-text-l;
+      font-size: $font-size-small;
+    }
+  }
 }

@@ -11,6 +11,14 @@
         </ul>
       </li>
     </ul>
+     <!-- 右侧字母列表 -->
+    <article class="letter-container">
+      <ul>
+        <li v-for="(item, index) of letterList" :key="index" class="item">
+          {{ item }}
+        </li>
+      </ul>
+    </article>
   </scroll>
 </template>
 
@@ -31,6 +39,14 @@ export default {
   },
   data() {
     return {};
+  },
+  computed: {
+    // 字母排列数组
+    letterList() {
+      return this.singerData.map(item => {
+        return item.title.substr(0, 1); // 从起始索引号提取字符串中指定数目的字符
+      });
+    }
   }
 };
 </script>
