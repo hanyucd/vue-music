@@ -58,6 +58,14 @@ export default {
     refresh() {
       // 重新计算 better-scroll，当 DOM 结构发生变化的时候务必要调用确保滚动的效果正常
       this.scroll && this.scroll.refresh();
+    },
+    scrollTo() {
+      // 滚动到指定的位置
+      this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments);
+    },
+    scrollToElement() {
+      // 滚动到指定的目标元素
+      this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments);
     }
   }
 };
