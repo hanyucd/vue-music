@@ -19,9 +19,10 @@ export function domHasClass(el, className) {
   return reg.test(el.className);
 };
 
+//  设置/获取 dom 节点属性值
 export function getData(el, name, val) {
   const prefix = 'data-';
-  
+
   if (val) {
     // 如果传入 val 实参就执行
     return el.setAttribute(prefix + name, val);
