@@ -49,8 +49,10 @@
       padding: 3px;
       line-height: 1;
       color: #fff;
-      // color: $color-text-l;
       font-size: $font-size-small;
+      &.current {
+        color: $color-theme;
+      }
     }
   }
 }

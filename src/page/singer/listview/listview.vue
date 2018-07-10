@@ -1,6 +1,12 @@
 <template>
   <!-- refs | 引用指向组件实例 -->
-  <scroll id="list_view" :data="singerData" ref="listview">
+  <scroll id="list_view"
+    :data="singerData"
+    ref="listview"
+    :listenScroll="listenScroll"
+    :probeType="probeType"
+    v-on:scroll="scroll"
+  >
     <ul>
       <li class="list-group" v-for="(group, index) in singerData" :key="index" ref="listGroup">
         <h2 class="list-group-title">{{ group.title }}</h2>
@@ -19,7 +25,13 @@
     >
       <ul>
                                                               <!-- data-* 用于存储自定义数据 -->
-        <li v-for="(item, index) of letterList" :key="index" class="item" :data-index="index">
+        <li
+          class="item"
+          v-for="(item, index) of letterList"
+          :key="index"
+          :data-index="index"
+          :class="{ 'current': currentIndex === index }"
+        >
           {{ item }}
         </li>
       </ul>
@@ -47,7 +59,10 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      scrollY: -1, // better-scroll 实时滚动位置
+      currentIndex: 0
+    };
   },
   computed: {
     // 字母排列数组
@@ -57,9 +72,35 @@ export default {
       });
     }
   },
+  watch: {
+    singerData() {
+      setTimeout(() => {
+        this._caclHeight();
+      }, 20);
+    },
+    // 监听 scrollY 落在 leftListHeight 的哪个区间，实现高亮联动
+    scrollY(newY) {
+      const listHeight = this.listHeight;
+      for (let i = 0; i < listHeight.length; i++) {
+        let height_1 = listHeight[i];
+        let height_2 = listHeight[i + 1];
+
+        if (!height_2 || (-newY > height_1 && -newY < height_2)) {
+          this.currentIndex = i;
+          return;
+        }
+        this.currentIndex = 0;
+      }
+    }
+  },
   created() {
     // 组件实例化完成创建一个 空对象
     this.touch = {};
+    this.listenScroll = true;
+    this.listHeight = [];
+    // 当 probeType 为 3 的时候，不仅在屏幕滑动的过程中，
+    // 而且在 momentum 滚动动画运行过程中实时派发 scroll 事件
+    this.probeType = 3;
   },
   methods: {
     /*
@@ -93,6 +134,25 @@ export default {
     _scrollTo(index) {
       // 通过 refs 得到子组件实例，从而访问子组件方法
       this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 2000); // 滚动动画执行的时长 2s
+    },
+    // 监听子组件派发的事件
+    scroll(pos) {
+      // 实时获取滚动 Y 轴位置
+      this.scrollY = pos.y;
+    },
+    // 计算歌手列表 Group 高度
+    _caclHeight() {
+      this.listHeight = [];
+      // 每组字母歌手列表数组
+      const list = this.$refs.listGroup;
+      let height = 0;
+      this.listHeight.push(height);
+
+      for (let item of list) {
+        // 获取内容的可视高度（不包括边框，边距或滚动条）
+        height += item.clientHeight;
+        this.listHeight.push(height);
+      }
     }
   }
 };
