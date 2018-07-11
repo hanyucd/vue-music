@@ -21,12 +21,12 @@ export default {
     data: {
       type: Array,
       default: null
-  },
-  // 是否监听滚动位置
-  listenScroll: {
+    },
+    // 是否监听滚动位置
+    listenScroll: {
       type: Boolean,
       default: false
-  }
+    }
   },
   watch: {
     // 监听 data
@@ -53,12 +53,12 @@ export default {
       });
       // 监听 better-scroll 滚动事件 | 派发自定义事件
       if (this.listenScroll) {
-          let self = this;
-          // better-scroll 滚动时触发
-          this.scroll.on('scroll', (pos) => {
-               // 向父组件派发事件
-              self.$emit('scroll', pos);
-          });
+        let self = this;
+        // better-scroll 滚动时触发
+        this.scroll.on('scroll', (pos) => {
+          // 向父组件派发事件
+          self.$emit('scroll', pos);
+        });
       }
     },
     enable() {
