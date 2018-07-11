@@ -81,16 +81,24 @@ export default {
     // 监听 scrollY 落在 leftListHeight 的哪个区间，实现高亮联动
     scrollY(newY) {
       const listHeight = this.listHeight;
-      for (let i = 0; i < listHeight.length; i++) {
+
+      // 当滚动到顶部，newY > 0
+      if (newY > 0) {
+        this.currentIndex = 0;
+        return;
+      }
+      // 在中间部分滚动
+      for (let i = 0; i < listHeight.length - 1; i++) {
         let height_1 = listHeight[i];
         let height_2 = listHeight[i + 1];
 
-        if (!height_2 || (-newY > height_1 && -newY < height_2)) {
+        if (-newY >= height_1 && -newY < height_2) {
           this.currentIndex = i;
           return;
         }
-        this.currentIndex = 0;
       }
+      // 当滚动到底部，且 -newY 大于最后一个元素的上限
+      this.currentIndex = listHeight.length - 2;
     }
   },
   created() {
