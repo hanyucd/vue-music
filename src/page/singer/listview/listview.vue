@@ -87,7 +87,7 @@ export default {
         this.currentIndex = 0;
         return;
       }
-      // 在中间部分滚动
+      // 在中间部分 滚动
       for (let i = 0; i < listHeight.length - 1; i++) {
         let height_1 = listHeight[i];
         let height_2 = listHeight[i + 1];
