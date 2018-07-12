@@ -24,7 +24,6 @@
       @touchmove.stop="letterTouchMove($event)"
     >
       <ul>
-                                                              <!-- data-* 用于存储自定义数据 -->
         <li
           class="item"
           v-for="(item, index) of letterList"
@@ -140,6 +139,14 @@ export default {
     },
     // 封装滚动
     _scrollTo(index) {
+      if (!index && index !== 0) return;
+
+      if (index < 0) {
+        index = 0;
+      } else if (index > this.listHeight.length - 2) {
+        index = this.listHeight.length - 2;
+      }
+      this.scrollY = -this.listHeight[index];
       // 通过 refs 得到子组件实例，从而访问子组件方法
       this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 2000); // 滚动动画执行的时长 2s
     },
