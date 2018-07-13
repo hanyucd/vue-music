@@ -35,11 +35,20 @@
         </li>
       </ul>
     </article>
+     <!-- 滚动固定标题实现 -->
+    <article class="list-fixed" v-show="fixedTitle">
+      <h1 class="fixed-title">{{ fixedTitle }}</h1>
+    </article>
+    <!-- loading 组件 -->
+    <article class="loading-container" v-show="!singerData.length">
+      <loading></loading>
+    </article>
   </scroll>
 </template>
 
 <script>
 import Scroll from '@/components/scroll/scroll';
+import Loading from '@/components/loading/loading';
 import { getData } from '@/assets/js/dom';
 
 // 单行字母高度 px
@@ -47,7 +56,8 @@ const LETTER_LINE_HEIGHT = 18;
 
 export default {
   components: {
-    Scroll
+    Scroll,
+    Loading
   },
   props: {
     singerData: {
@@ -69,6 +79,14 @@ export default {
       return this.singerData.map(item => {
         return item.title.substr(0, 1); // 从起始索引号提取字符串中指定数目的字符
       });
+    },
+    // 歌手列表顶部 title
+    fixedTitle() {
+      if (this.scrollY > 0) return '';
+
+      return this.singerData[this.currentIndex]
+        ? this.singerData[this.currentIndex].title
+        : '';
     }
   },
   watch: {
