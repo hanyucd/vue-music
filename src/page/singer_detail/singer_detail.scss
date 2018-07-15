@@ -11,8 +11,11 @@
 }
 
 .slide-enter-active, .slide-leave-active {
-  transition: all .5s; // 过渡
+  transition: all 1s; // 过渡
+  transform-origin: bottom right; // 设置中心原点：右下
 }
 .slide-enter, .slide-leave-to {
-  transform: translate3d(100%, 0, 0);
+  // transform: translate3d(100%, 0, 0);
+  transform: rotate(90deg); // 旋转 90 度
+  opacity: 0;
 }
