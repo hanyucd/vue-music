@@ -1,6 +1,7 @@
 <template>
   <div id="singer">
-    <list-view :singerData="singerList"></list-view>
+    <list-view :singerData="singerList" v-on:select="selectSinger"></list-view>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -27,12 +28,15 @@ export default {
     this._fetchSingerData();
   },
   methods: {
-    // 获取歌手列表数据
+    /*
+     * 获取歌手列表数据
+     */
     _fetchSingerData() {
       getSingerList().then(res => {
         if (res.code === ERROR_OK) {
           this.singerList = this._normalizeSinger(res.data.list);
         }
+        console.log(this.singerList[0].items);
       });
     },
     /*
@@ -82,6 +86,14 @@ export default {
       });
 
       return [...hot, ...other];
+    },
+    /*
+     * 监听子组件派发的事件 | 接收值
+     */
+    selectSinger(singer) {
+      this.$router.push({
+        path: `singer/${ singer.id }`
+      });
     }
   }
 };

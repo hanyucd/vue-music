@@ -2,16 +2,16 @@
   <!-- refs | 引用指向组件实例 -->
   <scroll id="list_view"
     :data="singerData"
-    ref="listview"
     :listenScroll="listenScroll"
     :probeType="probeType"
+    ref="listview"
     v-on:scroll="scroll"
   >
     <ul>
       <li class="list-group" v-for="(group, index) in singerData" :key="index" ref="listGroup">
         <h2 class="list-group-title">{{ group.title }}</h2>
         <ul>
-          <li class="list-group-item" v-for="(item, index) of group.items" :key="index">
+          <li class="list-group-item" v-for="(item, index) of group.items" :key="index" @click="selectItem(item)">
             <img class="avatar" v-lazy="item.avatar" alt="" />
             <span class="name">{{ item.name }}</span>
           </li>
@@ -155,7 +155,9 @@ export default {
       let nowIndex = parseInt(this.touch.startIndex) + offset;
       this._scrollTo(nowIndex);
     },
-    // 封装滚动
+    /*
+     * 封装滚动
+     */
     _scrollTo(index) {
       if (!index && index !== 0) return;
 
@@ -168,12 +170,16 @@ export default {
       // 通过 refs 得到子组件实例，从而访问子组件方法
       this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 2000); // 滚动动画执行的时长 2s
     },
-    // 监听子组件派发的事件
+    /*
+     * 监听子组件派发的事件
+     */
     scroll(pos) {
       // 实时获取滚动 Y 轴位置
       this.scrollY = pos.y;
     },
-    // 计算歌手列表 Group 高度
+    /*
+     * 计算歌手列表 Group 高度
+     */
     _caclHeight() {
       this.listHeight = [];
       // 每组字母歌手列表数组
@@ -186,6 +192,12 @@ export default {
         height += item.clientHeight;
         this.listHeight.push(height);
       }
+    },
+    /*
+     * 向父组件派发事件 | 传值
+     */
+    selectItem(item) {
+      this.$emit('select', item);
     }
   }
 };
