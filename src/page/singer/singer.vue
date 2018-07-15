@@ -12,6 +12,8 @@ import { createSinger } from '@/assets/js/singer';
 // 子组件
 import ListView from './listview/listview';
 
+import { mapMutations } from 'vuex';
+
 const HOT_NAME = '热门';
 const HOT_SINGER_LEN = 10;
 
@@ -94,7 +96,14 @@ export default {
       this.$router.push({
         path: `singer/${ singer.id }`
       });
-    }
+      this.setSinger(singer);
+    },
+    /*
+     *  vuex | mutations
+     */
+    ...mapMutations({
+      setSinger: 'set_singer'
+    })
   }
 };
 </script>

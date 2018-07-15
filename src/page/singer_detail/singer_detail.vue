@@ -1,13 +1,23 @@
 <template>
   <transition name="slide">
     <div id="singer_detail">
-      hanyu
+      {{ singer }}
     </div>
   </transition>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
+  computed: {
+    ...mapGetters([
+      'singer'
+    ])
+  },
+  created() {
+    console.log(this.singer);
+  }
 };
 </script>
 

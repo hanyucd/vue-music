@@ -5,7 +5,7 @@ import mutations from './mutations';
 import * as getters from './getters';
 import * as actions from './actions';
 // Vuex 自带一个日志插件用于一般的调试
-import createLogger from 'vuex/dist/logger'
+import createLogger from 'vuex/dist/logger';
 
 Vue.use(Vuex);
 
