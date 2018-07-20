@@ -44,5 +44,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import './singer_detail.scss';
+@import './singer_detail.scss';
 </style>
