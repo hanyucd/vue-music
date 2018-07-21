@@ -11,7 +11,7 @@
 }
 
 .slide-enter-active, .slide-leave-active {
-  transition: all 1s; // 过渡
+  transition: all .7s; // 过渡
   transform-origin: bottom right; // 设置中心原点：右下
 }
 .slide-enter, .slide-leave-to {

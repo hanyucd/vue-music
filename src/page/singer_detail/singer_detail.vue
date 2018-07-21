@@ -52,6 +52,7 @@ export default {
     _normalizeSongs(list) {
       let result = [];
       list.forEach(item => {
+        // 对象结构赋值
         let { musicData } = item;
 
         if (musicData.songid && musicData.albummid) {
