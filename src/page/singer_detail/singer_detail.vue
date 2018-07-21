@@ -55,7 +55,9 @@ export default {
         let { musicData } = item;
 
         if (musicData.songid && musicData.albummid) {
-          result.push(createSong(musicData));
+          createSong(musicData).then(data => {
+            result.push(data);
+          });
         }
       });
       return result;
