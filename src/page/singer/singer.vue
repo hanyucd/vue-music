@@ -38,7 +38,6 @@ export default {
         if (res.code === ERROR_OK) {
           this.singerList = this._normalizeSinger(res.data.list);
         }
-        console.log(this.singerList[0].items);
       });
     },
     /*

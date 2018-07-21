@@ -11,8 +11,14 @@ import { mapGetters } from 'vuex';
 
 import { getSingerDetail } from '@/api/singer';
 import { ERROR_OK } from '@/api/config';
+import { createSong } from '@/assets/js/song';
 
 export default {
+  data() {
+    return {
+      songs: []
+    };
+  },
   computed: {
     ...mapGetters([
       'singer'
@@ -35,14 +41,29 @@ export default {
 
       getSingerDetail(singerId).then(res => {
         if (res.code === ERROR_OK) {
-          console.log(res.data.list);
+          this.songs = this._normalizeSongs(res.data.list);
+          console.log(this.songs);
         }
       });
+    },
+    /*
+     * 重组歌手数据
+     */
+    _normalizeSongs(list) {
+      let result = [];
+      list.forEach(item => {
+        let { musicData } = item;
+
+        if (musicData.songid && musicData.albummid) {
+          result.push(createSong(musicData));
+        }
+      });
+      return result;
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-@import './singer_detail.scss';
+  @import './singer_detail.scss';
 </style>
