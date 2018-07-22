@@ -49,6 +49,11 @@
       background: rgba(7, 17, 27, 0.4);
     }
   }
+  section[class="bg-layer"] {
+    position: relative;
+    height: 100%;
+    background: $color-background;
+  }
   .list {
     position: fixed;
     top: 0;

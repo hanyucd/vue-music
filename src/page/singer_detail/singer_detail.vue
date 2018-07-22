@@ -36,7 +36,6 @@ export default {
     }
   },
   created() {
-    console.log(this.singer);
     this._fetchSingerDetail(this.singer.id);
   },
   methods: {
