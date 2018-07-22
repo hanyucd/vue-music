@@ -40,6 +40,36 @@
     padding-top: 70%;
     transform-origin: top;
     background-size: cover;
+    article.play-wrapper {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      z-index: 50;
+      .play {
+        box-sizing: border-box;
+        width: 135px;
+        padding: 7px 0;
+        margin: 0 auto;
+        text-align: center;
+        color: $color-theme;
+        border: 1px solid $color-theme;
+        border-radius: 100px;
+        font-size: 0;
+        @mixin commonStyle {
+          display: inline-block;
+          vertical-align: middle;
+        }
+        .icon-play {
+          @include commonStyle;
+          margin-right: 6px;
+          font-size: $font-size-medium-x;
+        }
+        .text {
+          @include commonStyle;
+          font-size: $font-size-small;
+        }
+      }
+    }
     div.filter {
       position: absolute;
       top: 0;
@@ -62,6 +92,12 @@
     background: $color-background;
     .song-wrapper {
       padding: 20px 30px;
+    }
+    .loading-container {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      transform: translateY(-50%);
     }
   }
 }

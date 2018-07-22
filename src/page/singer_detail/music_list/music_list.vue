@@ -1,13 +1,20 @@
 <template>
   <div id="music_list">
     <!-- 返回按钮 -->
-    <article class="back">
+    <article class="back" @click="back">
       <i class="icon-back"></i>
     </article>
     <!-- 顶部歌手名字 -->
     <h1 class="title" v-html="title"></h1>
     <!-- 头部背景图片 -->
     <section class="bg-image" :style="bgStyle" ref="bgImage">
+      <!-- 随机播放按钮 -->
+      <article class="play-wrapper">
+        <div class="play" v-show="songs.length > 0" ref="playBtn">
+          <i class="icon-play"></i>
+          <span class="text">随机播放</span>
+        </div>
+      </article>
       <!-- 背景图片上 暗灰蒙层 -->
       <div class="filter"></div>
     </section>
@@ -25,12 +32,17 @@
       <div class="song-wrapper">
         <song-list :songs="songs"></song-list>
       </div>
+      <!-- loading 组件 -->
+      <article class="loading-container" v-show="!songs.length">
+        <loading></loading>
+      </article>
     </scroll>
   </div>
 </template>
 
 <script>
 import Scroll from '@/components/scroll/scroll';
+import Loading from '@/components/loading/loading';
 import SongList from '@/components/song_list/song_list';
 
 // 为推层预留顶部高度
@@ -39,6 +51,7 @@ const RESERVED_HEIGHT = 40;
 export default {
   components: {
     Scroll,
+    Loading,
     SongList
   },
   props: {
@@ -90,14 +103,17 @@ export default {
         z_index = 10;
         bgImageDom.style.paddingTop = 0;
         bgImageDom.style.height = `${ RESERVED_HEIGHT }px`;
+        this.$refs.playBtn.style.display = 'none'; // 隐藏随机播放按钮
       } else {
         bgImageDom.style.paddingTop = '70%';
         bgImageDom.style.height = '0';
+        this.$refs.playBtn.style.display = ''; // 显示随机播放按钮
       }
       bgImageDom.style.zIndex = z_index;
     }
   },
   created() {
+    // 用于传递到子组件 scroll 中（better-scroll）
     this.probeType = 3;
     this.listenScroll = true;
   },
@@ -115,6 +131,12 @@ export default {
     scroll(pos) {
       this.scrollY = pos.y;
       console.log(this.scrollY);
+    },
+    /*
+     * 后退到上一级
+     */
+    back() {
+      this.$router.back();
     }
   }
 };
