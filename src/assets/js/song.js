@@ -68,7 +68,7 @@ function _getSongUrl(songMid, _guid) {
 }
 
 /*
- * 处理一首歌是两个歌手的边界值操作
+ * 处理一首歌是两个歌手的边界值操作 | 以 '/' 分割
  */
 function filterSinger(singer) {
   let result = [];

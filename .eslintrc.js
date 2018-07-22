@@ -38,6 +38,7 @@ module.exports = {
     'space-before-function-paren': ['error', 'never'],
     'template-curly-spacing': ['error', 'always'],
     'no-trailing-spaces': 'off',
-    'camelcase': 'off'
+    'camelcase': 'off',
+    'space-before-function-paren': 'off'
   }
 }

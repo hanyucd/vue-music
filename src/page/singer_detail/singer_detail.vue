@@ -1,19 +1,22 @@
 <template>
   <transition name="slide">
-    <div id="singer_detail">
-      {{ singer }}
-    </div>
+    <music-list :songs="songs" :title="title" :bgImage="bgImage"></music-list>
   </transition>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-
 import { getSingerDetail } from '@/api/singer';
 import { ERROR_OK } from '@/api/config';
 import { createSong } from '@/assets/js/song';
 
+import { mapGetters } from 'vuex';
+
+import MusicList from './music_list/music_list';
+
 export default {
+  components: {
+    MusicList
+  },
   data() {
     return {
       songs: []
@@ -22,7 +25,15 @@ export default {
   computed: {
     ...mapGetters([
       'singer'
-    ])
+    ]),
+    // 标题 | 传给子组件
+    title() {
+      return this.singer.name;
+    },
+    // 背景图 | 传给子组件
+    bgImage() {
+      return this.singer.avatar;
+    }
   },
   created() {
     console.log(this.singer);
@@ -47,7 +58,7 @@ export default {
       });
     },
     /*
-     * 重组歌手数据
+     * 重组歌手数据 | 过滤出所需数据
      */
     _normalizeSongs(list) {
       let result = [];
@@ -56,9 +67,11 @@ export default {
         let { musicData } = item;
 
         if (musicData.songid && musicData.albummid) {
-          createSong(musicData).then(data => {
+          // 立即执行箭头函数
+          (async () => {
+            let data = await createSong(musicData);
             result.push(data);
-          });
+          })();
         }
       });
       return result;
