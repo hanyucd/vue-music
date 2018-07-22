@@ -1,0 +1,26 @@
+@import '@/assets/scss/const.scss';
+@import '@/assets/scss/mymixin.scss';
+
+#song_list {
+  li[class="item"] {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    height: 64px;
+    font-size: $font-size-small-s;
+    section.content {
+      flex: 1;
+      line-height: 20px;
+      overflow: hidden;
+      h2.name {
+        @include no-wrap();
+        color: $color-text;
+      }
+      p.desc {
+        @include no-wrap();
+        margin-top: 4px;
+        color: $color-text-d;
+      }
+    }
+  }
+}

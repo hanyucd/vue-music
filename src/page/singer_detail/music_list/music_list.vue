@@ -7,15 +7,32 @@
     <!-- 顶部歌手名字 -->
     <h1 class="title" v-html="title"></h1>
 
-    <section class="bg-image" :style="bgStyle">
+    <section class="bg-image" :style="bgStyle" ref="bgImage">
       <!-- 蒙层 -->
       <div class="filter"></div>
     </section>
+
+    <scroll
+      class="list"
+      :data="songs"
+      ref="list"
+     >
+      <div class="song-wrapper">
+        <song-list :songs="songs"></song-list>
+      </div>
+    </scroll>
   </div>
 </template>
 
 <script>
+import Scroll from '@/components/scroll/scroll';
+import SongList from '@/components/song_list/song_list';
+
 export default {
+  components: {
+    Scroll,
+    SongList
+  },
   props: {
     // 背景图
     bgImage: {
@@ -36,6 +53,10 @@ export default {
     bgStyle() {
       return `background-image: url('${ this.bgImage }')`;
     }
+  },
+  mounted() {
+    // $el | Vue 实例使用的 DOM 元素
+    this.$refs.list.$el.style.top = `${ this.$refs.bgImage.clientHeight }px`;
   }
 };
 </script>

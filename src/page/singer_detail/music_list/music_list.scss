@@ -49,4 +49,14 @@
       background: rgba(7, 17, 27, 0.4);
     }
   }
+  .list {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    background: $color-background;
+    .song-wrapper {
+      padding: 20px 30px;
+    }
+  }
 }
