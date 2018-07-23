@@ -1,4 +1,4 @@
-import { ERROR_OK, commonParams } from '@/api/config';
+import { commonParams } from '@/api/config';
 import jsonp from '@/assets/js/jsonp';
 
 // 创建一个歌曲类
