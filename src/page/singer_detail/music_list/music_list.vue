@@ -113,7 +113,7 @@ export default {
     }
   },
   created() {
-    // 用于传递到子组件 scroll 中（better-scroll）
+    // 用于传递到子组件 scroll（better-scroll）中 
     this.probeType = 3;
     this.listenScroll = true;
   },
