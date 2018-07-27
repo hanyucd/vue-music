@@ -22,6 +22,7 @@ export default {
   // 过滤器
   filters: {
     defDesc(data) {
+      // 重组数据
       return `${ data.singer } - ${ data.album }`;
     }
   }
