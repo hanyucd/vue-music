@@ -101,7 +101,7 @@ export default {
      *  vuex | mutations
      */
     ...mapMutations({
-      setSinger: 'set_singer'
+      setSinger: 'SET_SINGER'
     })
   }
 };
