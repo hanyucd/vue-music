@@ -30,7 +30,7 @@
       :listenScroll="listenScroll"
      >
       <div class="song-wrapper">
-        <song-list :songs="songs"></song-list>
+        <song-list :songs="songs" v-on:select="select"></song-list>
       </div>
       <!-- loading 组件 -->
       <article class="loading-container" v-show="!songs.length">
@@ -44,6 +44,8 @@
 import Scroll from '@/components/scroll/scroll';
 import Loading from '@/components/loading/loading';
 import SongList from '@/components/song_list/song_list';
+
+import { mapActions } from 'vuex';
 
 // 为推层预留顶部高度
 const RESERVED_HEIGHT = 40;
@@ -136,7 +138,19 @@ export default {
      */
     back() {
       this.$router.back();
-    }
+    },
+    /*
+     * 监听子组件(song-list)派发的事件
+     */
+    select(item, index) {
+      this.selectPlay({
+        list: this.songs,
+        index
+      });
+    },
+    ...mapActions([
+      'selectPlay'
+    ])
   }
 };
 </script>

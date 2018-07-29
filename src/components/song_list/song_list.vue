@@ -1,7 +1,7 @@
 <template>
   <div id="song_list">
     <ul>
-      <li class="item" v-for="item of songs" :key="item.id">
+      <li class="item" v-for="(item, index) of songs" :key="item.id" @click="selectItem(item, index)">
         <section class="content">
           <h2 class="name">{{ item.name }}</h2>
           <p class="desc">{{ item | defDesc }}</p>
@@ -24,6 +24,11 @@ export default {
     defDesc(data) {
       // 重组数据
       return `${ data.singer } - ${ data.album }`;
+    }
+  },
+  methods: {
+    selectItem(item, index) {
+      this.$emit('select', item, index);
     }
   }
 };

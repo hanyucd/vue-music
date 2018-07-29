@@ -5,18 +5,21 @@
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
+    <player></player>
   </div>
 </template>
 
 <script>
 import Header from '@/components/header/header';
 import NavTable from '@/components/nav_table/nav_table';
+import Player from '@/page/player/player';
 
 export default {
   name: 'App',
   components: {
     Header,
-    NavTable
+    NavTable,
+    Player
   }
 };
 </script>
