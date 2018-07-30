@@ -9,7 +9,7 @@
        <!-- 播放器顶部 -->
       <div class="top">
         <!-- 返回按钮 -->
-        <div class="back" @click="back">
+        <div class="back" @click="miniPlayer">
           <i class="icon-back"></i>
         </div>
         <h1 class="title" v-html="currentSong.name"></h1>
@@ -48,7 +48,7 @@
       </div>
     </section>
      <!-- 最小化的播放器 -->
-    <section class="mini-player" v-show="!fullScreen" @click="open">
+    <section class="mini-player" v-show="!fullScreen" @click="maxPlayer">
       <div class="icon">
         <img :src="currentSong.image" width="40" height="40" />
       </div>
@@ -82,13 +82,13 @@ export default {
     /*
      * 最小化播放器
      */
-    back() {
+    miniPlayer() {
       this.setFullScreen(false);
     },
     /*
     * 最大化播放器
     */
-    open() {
+    maxPlayer() {
       this.setFullScreen(true);
     }
   }
