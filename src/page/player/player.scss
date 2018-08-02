@@ -1,6 +1,28 @@
 @import '@/assets/scss/const.scss';
 @import '@/assets/scss/mymixin.scss';
 
+// 全屏播放器 动画
+.normal-enter-active, .normal-leave-active {
+  transition: all .5s;
+  .top, .bottom {
+    transition: all .5s cubic-bezier(0.86, 0.18, 0.82, 1.32);
+  }
+}
+.normal-enter, .normal-leave-to {
+  opacity: 0;
+  .top { transform: translate3d(0, -100px, 0); }
+  .bottom { transform: translate3d(0, 100px, 0); }
+}
+
+// 底部最小化播放器 动画
+.mini-enter-active, .mini-leave-active {
+  transition: all .5s;
+}
+.mini-enter, .mini-leave-to {
+  opacity: 0;
+  transform: translateY(60px);
+}
+
 #player {
   .normal-player {
     position: fixed;
