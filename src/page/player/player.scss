@@ -14,6 +14,19 @@
   .bottom { transform: translate3d(0, 100px, 0); }
 }
 
+// 定义歌曲播放 图片滚动动画
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 // 底部最小化播放器 动画
 .mini-enter-active, .mini-leave-active {
   transition: all .5s;
@@ -99,6 +112,12 @@
             box-sizing: border-box;
             border: 10px solid rgba(255, 255, 255, .1);
             border-radius: 50%;
+            &.play {
+              animation: rotate 20s linear infinite;   // infinite: 循环播放
+            }
+            &.pause {
+              animation-play-state: paused;   // 动画的播放状态 | 暂停
+            }
             .image {
               position: absolute;
               left: 0;
@@ -157,6 +176,12 @@
       padding: 0 10px 0 20px;
       img {
         border-radius: 50%;
+        &.play {
+          animation: rotate 20s linear infinite;
+        }
+        &.pause {
+          animation-play-state: paused;
+        }
       }
     }
     .text {
@@ -185,6 +210,12 @@
       .icon-play-mini, .icon-pause-mini, .icon-playlist {
         font-size: 30px;
         color: $color-theme;
+      }
+      .icon-mini {
+        // position: absolute;
+        // left: 0;
+        // top: 0;
+        // font-size: 32px;
       }
     }
   }

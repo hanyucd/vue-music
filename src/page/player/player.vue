@@ -21,7 +21,7 @@
           <!-- 唱片 -->
           <div class="middle-l">
             <div class="cd-wrapper">
-              <div class="cd">
+              <div class="cd" :class="[ playing ? 'play' : 'play pause' ]">
                 <img :src="currentSong.image" class="image"/>
               </div>
             </div>
@@ -37,7 +37,7 @@
               <i class="icon-prev"></i>
             </div>
             <div class="icon i-center">
-              <i class="icon-play"></i>
+              <i :class="[ playing ? 'icon-pause' : 'icon-play' ]" @click="togglePlaying"></i>
             </div>
             <div class="icon i-right">
               <i class="icon icon-next"></i>
@@ -54,18 +54,27 @@
     <transition name="mini">
       <section class="mini-player" v-show="!fullScreen" @click="maxPlayer">
         <div class="icon">
-          <img :src="currentSong.image" width="40" height="40" />
+          <img :class="[ playing ? 'play' : 'play pause' ]" :src="currentSong.image" width="40" height="40" />
         </div>
         <div class="text">
           <h2 class="name" v-html="currentSong.name"></h2>
           <p class="desc" v-html="currentSong.singer"></p>
         </div>
-        <div class="control"></div>
+        <div class="control">
+          <i class="icon-mini" :class="[ playing ? 'icon-pause-mini' : 'icon-play-mini' ]" @click.stop="togglePlaying"></i>
+        </div>
         <div class="control">
           <i class="icon-playlist"></i>
         </div>
       </section>
     </transition>
+    <!-- 播放器 -->
+    <audio
+      ref="audio"
+      :src="currentSong.url"
+      controls
+    >
+    </audio>
   </div>
 </template>
 
@@ -77,12 +86,29 @@ export default {
     ...mapGetters([
       'fullScreen',
       'playlist',
-      'currentSong'
+      'currentSong',
+      'playing'
     ])
+  },
+  watch: {
+    // 监听当前所加载歌曲
+    currentSong() {
+      this.$nextTick(() => {
+        this.$refs.audio.play();
+      });
+    },
+    // 监听歌曲播放状态 | 播放 or 暂停
+    playing(newValue) {
+      const audio = this.$refs.audio;
+      this.$nextTick(() => {
+        newValue ? audio.play() : audio.pause();
+      });
+    }
   },
   methods: {
     ...mapMutations({
-      setFullScreen: 'SET_FULL_SCREEN'
+      setFullScreen: 'SET_FULL_SCREEN',
+      setPlayingState: 'SET_PLAYING_STATE'
     }),
     /*
      * 最小化播放器
@@ -95,6 +121,12 @@ export default {
     */
     maxPlayer() {
       this.setFullScreen(true);
+    },
+    /*
+     * 控制 播放/暂停 歌曲
+     */
+    togglePlaying() {
+      this.setPlayingState(!this.playing);
     }
   }
 };
