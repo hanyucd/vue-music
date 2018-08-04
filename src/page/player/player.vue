@@ -29,9 +29,12 @@
         </div>
         <!-- 播放器底部 -->
         <div class="bottom">
+          <!-- 播放进度 -->
           <section class="progress-wrapper">
             <span class="time time-l">{{ format(currentTime) }}</span>
-            <div class="progress-bar-wrapper"></div>
+            <div class="progress-bar-wrapper">
+              <progress-bar></progress-bar>
+            </div>
             <span class="time time-r">{{ format(currentSong.duration) }}</span>
           </section>
 
@@ -95,7 +98,12 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex';
 
+import ProgressBar from './progress_bar/progress_bar';
+
 export default {
+  components: {
+    ProgressBar
+  },
   data() {
     return {
       songCanPlay: false, // 定义歌曲播放 标志位
@@ -208,7 +216,7 @@ export default {
       interval = Math.floor(interval);
       const minute = Math.floor(interval / 60);
       const second = this._pad(interval % 60);
-      return `${ minute } : ${ second }`;
+      return `${ minute }:${ second }`;
     },
     // 补零
     _pad(num, n = 2) {

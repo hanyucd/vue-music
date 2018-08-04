@@ -134,6 +134,31 @@
       position: absolute;
       bottom: 50px;
       width: 100%;
+      .progress-wrapper {
+        display: flex;
+        align-items: center;
+        width: 80%;
+        margin: 0 auto;
+        padding: 10px 0;
+        .time {
+          width: 30px;
+          line-height: 30px;
+          flex: 0 0 30px;
+          color: $color-text;
+          font-size: $font-size-small;
+          &.time-l {
+            text-align: left;
+            margin-right: 5px;
+          }
+          &.time-r {
+            text-align: right;
+            margin-left: 5px;
+          }
+        }
+        .progress-bar-wrapper {
+          flex: 1;
+        }
+      }
       .operators {
         display: flex;
         align-items: center;
