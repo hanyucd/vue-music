@@ -33,7 +33,7 @@
           <section class="progress-wrapper">
             <span class="time time-l">{{ format(currentTime) }}</span>
             <div class="progress-bar-wrapper">
-              <progress-bar></progress-bar>
+              <progress-bar :percent="percent"></progress-bar>
             </div>
             <span class="time time-r">{{ format(currentSong.duration) }}</span>
           </section>
@@ -89,7 +89,6 @@
       @play="canplay"
       @error="error"
       @timeupdate="timeUpdate"
-      controls
     >
     </audio>
   </div>
@@ -117,7 +116,10 @@ export default {
       'currentSong',
       'playing',
       'currentIndex'
-    ])
+    ]),
+    percent() {
+      return this.currentTime / this.currentSong.duration;
+    }
   },
   watch: {
     // 监听当前所加载歌曲
@@ -147,8 +149,8 @@ export default {
       this.setFullScreen(false);
     },
     /*
-    * 最大化播放器
-    */
+     * 最大化播放器
+     */
     maxPlayer() {
       this.setFullScreen(true);
     },
