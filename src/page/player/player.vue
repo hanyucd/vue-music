@@ -30,18 +30,23 @@
         <!-- 播放器底部 -->
         <div class="bottom">
           <div class="operators">
+            <!-- 歌曲播放模式 icon -->
             <div class="icon i-left">
               <i class="icon-sequence"></i>
             </div>
+            <!-- 左切换 icon -->
             <div class="icon i-left">
-              <i class="icon-prev"></i>
+              <i class="icon-prev" @click="prevSong"></i>
             </div>
+            <!-- 中间播放 icon -->
             <div class="icon i-center">
               <i :class="[ playing ? 'icon-pause' : 'icon-play' ]" @click="togglePlaying"></i>
             </div>
+            <!-- 右切换 icon -->
             <div class="icon i-right">
-              <i class="icon icon-next"></i>
+              <i class="icon icon-next" @click="nextSong"></i>
             </div>
+            <!-- 收藏 icon -->
             <div class="icon i-right">
               <i class="icon icon-not-favorite"></i>
             </div>
@@ -72,6 +77,8 @@
     <audio
       ref="audio"
       :src="currentSong.url"
+      @play="canplay"
+      @error="error"
       controls
     >
     </audio>
@@ -82,12 +89,18 @@
 import { mapGetters, mapMutations } from 'vuex';
 
 export default {
+  data() {
+    return {
+      songCanPlay: false // 定义歌曲播放 标志位
+    };
+  },
   computed: {
     ...mapGetters([
       'fullScreen',
       'playlist',
       'currentSong',
-      'playing'
+      'playing',
+      'currentIndex'
     ])
   },
   watch: {
@@ -108,7 +121,8 @@ export default {
   methods: {
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
-      setPlayingState: 'SET_PLAYING_STATE'
+      setPlayingState: 'SET_PLAYING_STATE',
+      setCurrentIndex: 'SET_CURRENT_INDEX'
     }),
     /*
      * 最小化播放器
@@ -127,6 +141,45 @@ export default {
      */
     togglePlaying() {
       this.setPlayingState(!this.playing);
+    },
+    /*
+     * 切换下一首歌
+     */
+    nextSong() {
+      if (!this.songCanPlay) return;
+
+      let index = this.currentIndex + 1;
+      if (index === this.playlist.length) {
+        index = 0;
+      }
+      this.setCurrentIndex(index);
+      if (!this.playing) {
+        this.togglePlaying();
+      }
+      this.songCanPlay = false;
+    },
+    /*
+     * 切换上一首歌
+     */
+    prevSong() {
+      if (!this.songCanPlay) return;
+
+      let index = this.currentIndex - 1;
+      if (index === -1) {
+        index = this.playlist.length - 1;
+      }
+      this.setCurrentIndex(index);
+      if (!this.playing) {
+        this.togglePlaying();
+      }
+      this.songCanPlay = false;
+    },
+    canplay() {
+      this.songCanPlay = true;
+      console.log('即将播放...');
+    },
+    error() {
+      this.songCanPlay = true;
     }
   }
 };
