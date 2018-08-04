@@ -29,7 +29,13 @@
         </div>
         <!-- 播放器底部 -->
         <div class="bottom">
-          <div class="operators">
+          <section class="progress-wrapper">
+            <span class="time time-l">{{ format(currentTime) }}</span>
+            <div class="progress-bar-wrapper"></div>
+            <span class="time time-r">{{ format(currentSong.duration) }}</span>
+          </section>
+
+          <section class="operators">
             <!-- 歌曲播放模式 icon -->
             <div class="icon i-left">
               <i class="icon-sequence"></i>
@@ -50,7 +56,7 @@
             <div class="icon i-right">
               <i class="icon icon-not-favorite"></i>
             </div>
-          </div>
+          </section>
         </div>
       </section>
     </transition>
@@ -79,6 +85,7 @@
       :src="currentSong.url"
       @play="canplay"
       @error="error"
+      @timeupdate="timeUpdate"
       controls
     >
     </audio>
@@ -91,7 +98,8 @@ import { mapGetters, mapMutations } from 'vuex';
 export default {
   data() {
     return {
-      songCanPlay: false // 定义歌曲播放 标志位
+      songCanPlay: false, // 定义歌曲播放 标志位
+      currentTime: 0 // 当前播放时间
     };
   },
   computed: {
@@ -174,12 +182,42 @@ export default {
       }
       this.songCanPlay = false;
     },
+    /*
+     * 当播放器开始播放音频时 触发
+     */
     canplay() {
       this.songCanPlay = true;
       console.log('即将播放...');
     },
+    /*
+     * 当播放器加载期间发生错误时 触发
+     */
     error() {
       this.songCanPlay = true;
+    },
+    /*
+     * 当播放器播放位置改变时 连续触发
+     */
+    timeUpdate(event) {
+      this.currentTime = event.target.currentTime;
+    },
+    /*
+     * 格式化歌曲时长
+     */
+    format(interval) {
+      interval = Math.floor(interval);
+      const minute = Math.floor(interval / 60);
+      const second = this._pad(interval % 60);
+      return `${ minute } : ${ second }`;
+    },
+    // 补零
+    _pad(num, n = 2) {
+      let len = num.toString().length;
+      while (len < n) {
+        num = '0' + num;
+        len++;
+      }
+      return num;
     }
   }
 };
