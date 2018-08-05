@@ -22,7 +22,7 @@
           <div class="middle-l">
             <div class="cd-wrapper">
               <div class="cd" :class="[ playing ? 'play' : 'play pause' ]">
-                <img :src="currentSong.image" class="image"/>
+                <img :src="currentSong.image" class="image" />
               </div>
             </div>
           </div>
@@ -33,7 +33,7 @@
           <section class="progress-wrapper">
             <span class="time time-l">{{ format(currentTime) }}</span>
             <div class="progress-bar-wrapper">
-              <progress-bar :percent="percent"></progress-bar>
+              <progress-bar :percent="percent" v-on:percentChange="onPercentChange"></progress-bar>
             </div>
             <span class="time time-r">{{ format(currentSong.duration) }}</span>
           </section>
@@ -117,6 +117,7 @@ export default {
       'playing',
       'currentIndex'
     ]),
+    // 计算出播放时长比例
     percent() {
       return this.currentTime / this.currentSong.duration;
     }
@@ -197,7 +198,6 @@ export default {
      */
     canplay() {
       this.songCanPlay = true;
-      console.log('即将播放...');
     },
     /*
      * 当播放器加载期间发生错误时 触发
@@ -228,6 +228,16 @@ export default {
         len++;
       }
       return num;
+    },
+    /*
+     * 监听子组件派发的事件 | 重设歌曲播放位置
+     */
+    onPercentChange(percent) {
+      this.$refs.audio.currentTime = percent * this.currentSong.duration;
+      // 进度改变后自动播放
+      if (!this.playing) {
+        this.togglePlaying();
+      }
     }
   }
 };
