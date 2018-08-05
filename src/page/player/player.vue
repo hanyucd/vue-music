@@ -40,8 +40,8 @@
 
           <section class="operators">
             <!-- 歌曲播放模式 icon -->
-            <div class="icon i-left">
-              <i class="icon-sequence"></i>
+            <div class="icon i-left" @click="changeMode">
+              <i :class="iconMode"></i>
             </div>
             <!-- 左切换 icon -->
             <div class="icon i-left">
@@ -115,11 +115,30 @@ export default {
       'playlist',
       'currentSong',
       'playing',
-      'currentIndex'
+      'currentIndex',
+      'mode'
     ]),
     // 计算出播放时长比例
     percent() {
       return this.currentTime / this.currentSong.duration;
+    },
+    // 播放模式对应图标
+    iconMode() {
+      let styleClass = '';
+
+      switch (this.mode) {
+        case 0:
+          styleClass = 'icon-sequence';
+          break;
+        case 1:
+          styleClass = 'icon-loop';
+          break;
+        case 2:
+          styleClass = 'icon-random';
+          break;
+      }
+
+      return styleClass;
     }
   },
   watch: {
@@ -141,7 +160,8 @@ export default {
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
       setPlayingState: 'SET_PLAYING_STATE',
-      setCurrentIndex: 'SET_CURRENT_INDEX'
+      setCurrentIndex: 'SET_CURRENT_INDEX',
+      setPlayMode: 'SET_MODE'
     }),
     /*
      * 最小化播放器
@@ -238,6 +258,13 @@ export default {
       if (!this.playing) {
         this.togglePlaying();
       }
+    },
+    /*
+     * 改变播放模式
+     */
+    changeMode() {
+      let mode = (this.mode + 1) % 3;
+      this.setPlayMode(mode);
     }
   }
 };
