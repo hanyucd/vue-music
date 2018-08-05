@@ -99,6 +99,8 @@ import { mapGetters, mapMutations } from 'vuex';
 
 import ProgressBar from './progress_bar/progress_bar';
 
+import { shuffle } from '@/assets/js/util';
+
 export default {
   components: {
     ProgressBar
@@ -113,6 +115,7 @@ export default {
     ...mapGetters([
       'fullScreen',
       'playlist',
+      'sequenceList',
       'currentSong',
       'playing',
       'currentIndex',
@@ -143,7 +146,9 @@ export default {
   },
   watch: {
     // 监听当前所加载歌曲
-    currentSong() {
+    currentSong(newSong, oldSong) {
+      if (newSong.id === oldSong.id) return;
+
       this.$nextTick(() => {
         this.$refs.audio.play();
       });
@@ -161,7 +166,8 @@ export default {
       setFullScreen: 'SET_FULL_SCREEN',
       setPlayingState: 'SET_PLAYING_STATE',
       setCurrentIndex: 'SET_CURRENT_INDEX',
-      setPlayMode: 'SET_MODE'
+      setPlayMode: 'SET_MODE',
+      setPlayList: 'SET_PLAY_LIST'
     }),
     /*
      * 最小化播放器
@@ -265,6 +271,24 @@ export default {
     changeMode() {
       let mode = (this.mode + 1) % 3;
       this.setPlayMode(mode);
+
+      let newList = null;
+      // mode === 2：随机播放
+      if (mode === 2) {
+        // 获取随机打乱后的歌曲列表
+        newList = shuffle(this.sequenceList);
+      } else {
+        // 顺序播放、单曲循环
+        newList = this.sequenceList;
+      }
+
+      // 调整当前歌曲的索引 | findIndex: 返回符合回调函数条件的数组元素索引
+      let index = newList.findIndex(item => {
+        return item.id === this.currentSong.id;
+      });
+
+      this.setCurrentIndex(index);
+      this.setPlayList(newList);
     }
   }
 };
