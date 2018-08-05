@@ -75,7 +75,7 @@
           <p class="desc" v-html="currentSong.singer"></p>
         </div>
         <div class="control">
-          <i class="icon-mini" :class="[ playing ? 'icon-pause-mini' : 'icon-play-mini' ]" @click.stop="togglePlaying"></i>
+          <i :class="[ playing ? 'icon-pause-mini' : 'icon-play-mini' ]" @click.stop="togglePlaying"></i>
         </div>
         <div class="control">
           <i class="icon-playlist"></i>
