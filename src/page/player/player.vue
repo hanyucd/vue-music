@@ -19,13 +19,29 @@
         <!-- 播放器中间 -->
         <div class="middle">
           <!-- 唱片 -->
-          <div class="middle-l">
+          <section class="middle-l">
             <div class="cd-wrapper">
               <div class="cd" :class="[ playing ? 'play' : 'play pause' ]">
                 <img :src="currentSong.image" class="image" />
               </div>
             </div>
-          </div>
+          </section>
+
+          <!-- 歌词 -->
+          <section class="middle-r" ref="lyricList">
+            <div class="lyric-wrapper">
+              <div v-if="currentLyric">
+                <p
+                  class="text"
+                  ref="lyricLine"
+                  v-for="(line, index) in currentLyric.lines"
+                  :key="index"
+                >
+                {{ line.txt }}
+                </p>
+              </div>
+            </div>
+          </section>
         </div>
         <!-- 播放器底部 -->
         <div class="bottom">
@@ -112,7 +128,7 @@ export default {
     return {
       songCanPlay: false, // 定义歌曲播放 标志位
       currentTime: 0, // 当前播放时间
-      currentLyric: null // 当前的歌词
+      currentLyric: null // 当前歌曲的歌词
     };
   },
   computed: {
