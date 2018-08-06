@@ -28,20 +28,21 @@
           </section>
 
           <!-- 歌词 -->
-          <section class="middle-r" ref="lyricList">
+          <scroll class="middle-r" ref="lyricList" :data="currentLyric && currentLyric.lines">
             <div class="lyric-wrapper">
               <div v-if="currentLyric">
                 <p
-                  class="text"
-                  ref="lyricLine"
                   v-for="(line, index) in currentLyric.lines"
                   :key="index"
+                  :class="{ current: currentLyricLine === index }"
+                  class="text"
+                  ref="lyricLine"
                 >
                 {{ line.txt }}
                 </p>
               </div>
             </div>
-          </section>
+          </scroll>
         </div>
         <!-- 播放器底部 -->
         <div class="bottom">
@@ -115,6 +116,7 @@
 import { mapGetters, mapMutations } from 'vuex';
 // 导入子组件
 import ProgressBar from './progress_bar/progress_bar';
+import Scroll from '@/components/scroll/scroll';
 // 导入工具函数
 import { shuffle } from '@/assets/js/util';
 // 导入第三方库
@@ -122,13 +124,15 @@ import Lyric from 'lyric-parser';
 
 export default {
   components: {
-    ProgressBar
+    ProgressBar,
+    Scroll
   },
   data() {
     return {
       songCanPlay: false, // 定义歌曲播放 标志位
       currentTime: 0, // 当前播放时间
-      currentLyric: null // 当前歌曲的歌词
+      currentLyric: null, // 当前歌曲的歌词
+      currentLyricLine: 0 // 当前播放的歌词在第几行
     };
   },
   computed: {
@@ -335,9 +339,26 @@ export default {
      */
     _fetchLyric() {
       this.currentSong.fetchLyric().then(lyric => {
-        this.currentLyric = new Lyric(lyric);
+        this.currentLyric = new Lyric(lyric, this._handleLyric);
+
+        if (this.playing) {
+          this.currentLyric.play();
+        }
       });
       console.log(this.currentLyric);
+    },
+    /*
+     * new Lyric() 的回调函数
+     */
+    _handleLyric({ lineNum, txt }) {
+      this.currentLyricLine = lineNum;
+
+      if (lineNum > 5) {
+        let lineEl = this.$refs.lyricLine[lineNum - 5];
+        this.$refs.lyricList.scrollToElement(lineEl, 1000);
+      } else {
+        this.$refs.lyricList.scrollTo(0, 0, 1000);
+      }
     }
   }
 };
