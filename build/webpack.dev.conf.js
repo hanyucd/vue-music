@@ -58,7 +58,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     // 新增 后端代理请求
     before(app) {
       app.use(bodyParser.urlencoded({ extended: true })); // 解析文本格式
-
+      // 获取首页歌单数据
       app.get('/api/getDiscList', function(req, res) {
         let url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg';
 
@@ -73,8 +73,36 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         }).then(response => {
           res.json(response.data);
         }).catch(error => {
-          console.log('后台代理失败:', error);
+          console.log('歌单后台代理失败:', error);
         });
+      });
+
+      // 获取播放器歌曲歌词数据
+      app.get('/api/lyric', function(req, res) {
+        let url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg';
+
+        console.log(`\n ${ __filename }: 进入歌词请求后台代理...`);
+        // 歌词列表代理
+        axios.get(url, {
+          headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then(response => {
+          let ret = response.data;
+          // jsonp 数据转为 json 数据
+          if (typeof ret === 'string') {
+            let reg = /^\w+\(({[^()]+})\)$/;
+            let matches = ret.match(reg);
+            if (matches) {
+              ret = JSON.parse(matches[1]);
+            }
+          }
+          res.json(ret);
+        }).catch(error => {
+          console.log('歌词后台代理失败:', error);
+        })
       });
     }
   },

@@ -1,5 +1,6 @@
-import { commonParams } from '@/api/config';
 import jsonp from '@/assets/js/jsonp';
+import { commonParams, ERROR_OK } from '@/api/config';
+import { getLyric } from '@/api/song';
 
 // 创建一个歌曲类
 export default class Song {
@@ -12,6 +13,15 @@ export default class Song {
     this.image = image; // 专辑封面图片
     this.duration = duration; // 歌曲时长 | 秒（s）
     this.url = url; // 歌曲播放源
+  }
+  // 获取歌词数据
+  fetchLyric() {
+    getLyric(this.mid).then(res => {
+      if (res.retcode === ERROR_OK) {
+        this.lyric = res.lyric;
+        console.log(this.lyric);
+      }
+    });
   }
 }
 

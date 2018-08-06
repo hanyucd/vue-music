@@ -97,9 +97,9 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex';
-
+// 导入子组件
 import ProgressBar from './progress_bar/progress_bar';
-
+// 导入工具函数
 import { shuffle } from '@/assets/js/util';
 
 export default {
@@ -152,6 +152,7 @@ export default {
 
       this.$nextTick(() => {
         this.$refs.audio.play();
+        this.currentSong.fetchLyric();
       });
     },
     // 监听歌曲播放状态 | 播放 or 暂停
