@@ -144,7 +144,7 @@ export default {
       this.$router.back();
     },
     /*
-     * 监听子组件(song-list)派发的事件
+     * 监听子组件(song-list)派发的事件 | 触发选择播放 (Actions)
      */
     select(item, index) {
       this.selectPlay({
