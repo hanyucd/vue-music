@@ -155,6 +155,24 @@
       position: absolute;
       bottom: 50px;
       width: 100%;
+      .dot-wrapper {
+        text-align: center;
+        font-size: 0;
+        .dot {
+          display: inline-block;
+          vertical-align: middle;
+          margin: 0 4px;
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.5);
+          &.active {
+            width: 20px;
+            border-radius: 5px;
+            background: $color-theme;
+          }
+        }
+      }
       .progress-wrapper {
         display: flex;
         align-items: center;

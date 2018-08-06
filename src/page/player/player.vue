@@ -46,6 +46,12 @@
         </div>
         <!-- 播放器底部 -->
         <div class="bottom">
+          <!-- 分页点 -->
+          <section class="dot-wrapper">
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </section>
+
           <!-- 播放进度 -->
           <section class="progress-wrapper">
             <span class="time time-l">{{ format(currentTime) }}</span>
@@ -55,6 +61,7 @@
             <span class="time time-r">{{ format(currentSong.duration) }}</span>
           </section>
 
+           <!-- 底部操作区 -->
           <section class="operators">
             <!-- 歌曲播放模式 icon -->
             <div class="icon i-left" @click="changeMode">
