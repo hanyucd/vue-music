@@ -1,6 +1,7 @@
 import jsonp from '@/assets/js/jsonp';
 import { commonParams, ERROR_OK } from '@/api/config';
 import { getLyric } from '@/api/song';
+import { Base64 } from 'js-base64';
 
 // 创建一个歌曲类
 export default class Song {
@@ -16,11 +17,20 @@ export default class Song {
   }
   // 获取歌词数据
   fetchLyric() {
-    getLyric(this.mid).then(res => {
-      if (res.retcode === ERROR_OK) {
-        this.lyric = res.lyric;
-        console.log(this.lyric);
-      }
+    let _this = this;
+
+    if (this.lyric) return Promise.resolve(this.lyric);
+
+    return new Promise(function(resolve, reject) {
+      getLyric(_this.mid).then(res => {
+        if (res.retcode === ERROR_OK) {
+          // 解码
+          _this.lyric = Base64.decode(res.lyric);
+          resolve(_this.lyric);
+        } else {
+          reject(new Error('no lyric'));
+        }
+      });
     });
   }
 }

@@ -101,6 +101,8 @@ import { mapGetters, mapMutations } from 'vuex';
 import ProgressBar from './progress_bar/progress_bar';
 // 导入工具函数
 import { shuffle } from '@/assets/js/util';
+// 导入第三方库
+import Lyric from 'lyric-parser';
 
 export default {
   components: {
@@ -109,7 +111,8 @@ export default {
   data() {
     return {
       songCanPlay: false, // 定义歌曲播放 标志位
-      currentTime: 0 // 当前播放时间
+      currentTime: 0, // 当前播放时间
+      currentLyric: null // 当前的歌词
     };
   },
   computed: {
@@ -152,7 +155,8 @@ export default {
 
       this.$nextTick(() => {
         this.$refs.audio.play();
-        this.currentSong.fetchLyric();
+
+        this._fetchLyric();
       });
     },
     // 监听歌曲播放状态 | 播放 or 暂停
@@ -309,6 +313,15 @@ export default {
 
       this.setCurrentIndex(index);
       this.setPlayList(newList);
+    },
+    /*
+     * 歌词处理
+     */
+    _fetchLyric() {
+      this.currentSong.fetchLyric().then(lyric => {
+        this.currentLyric = new Lyric(lyric);
+      });
+      console.log(this.currentLyric);
     }
   }
 };
