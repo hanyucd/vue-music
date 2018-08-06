@@ -89,6 +89,7 @@
       @play="canplay"
       @error="error"
       @timeupdate="timeUpdate"
+      @ended="endPlay"
     >
     </audio>
   </div>
@@ -236,6 +237,24 @@ export default {
      */
     timeUpdate(event) {
       this.currentTime = event.target.currentTime;
+    },
+    /*
+     * 当播放器播放结束时 触发
+     */
+    endPlay() {
+      // mode：1 | 单曲循环模式
+      if (this.mode === 1) {
+        this.loopSong();
+      } else {
+        this.nextSong();
+      }
+    },
+    /*
+     * 单曲循环
+     */
+    loopSong() {
+      this.$refs.audio.currentTime = 0;
+      this.$refs.audio.play();
     },
     /*
      * 格式化歌曲时长

@@ -10,7 +10,7 @@
     <section class="bg-image" :style="bgStyle" ref="bgImage">
       <!-- 随机播放按钮 -->
       <article class="play-wrapper">
-        <div class="play" v-show="songs.length > 0" ref="playBtn">
+        <div class="play" v-show="songs.length > 0" ref="playBtn" @click="random">
           <i class="icon-play"></i>
           <span class="text">随机播放</span>
         </div>
@@ -127,6 +127,10 @@ export default {
     this.$refs.list.$el.style.top = `${ this.$refs.bgImage.clientHeight }px`;
   },
   methods: {
+    ...mapActions([
+      'selectPlay',
+      'randomPlay'
+    ]),
     /*
      * 监听子组件派发的事件 | better-scroll 滚动事件
      */
@@ -148,9 +152,14 @@ export default {
         index
       });
     },
-    ...mapActions([
-      'selectPlay'
-    ])
+    /*
+     * 触发随机播放 (Actions)
+     */
+    random() {
+      this.randomPlay({
+        list: this.songs
+      });
+    }
   }
 };
 </script>

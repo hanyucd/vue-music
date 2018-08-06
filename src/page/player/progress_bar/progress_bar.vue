@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     /*
-     * 封装 进度条前进 & 小球前进
+     * 封装 进度条偏移值 & 小球偏移值
      */
     _offset(offsetWidth) {
       this.$refs.progress.style.width = `${ offsetWidth }px`;
@@ -86,7 +86,11 @@ export default {
      * 点击进度条改变播放进度
      */
     progressClick(event) {
-      this._offset(event.offsetX);
+      // 返回一个矩形对象，包含四个属性：left、top、right、bottom | 分别表示元素各边与视口位置的距离。
+      let rect = this.$refs.progressBar.getBoundingClientRect();
+      let offsetWidth = event.pageX - rect.left;
+
+      this._offset(offsetWidth);
       this._triggerPercent();
     },
     /*

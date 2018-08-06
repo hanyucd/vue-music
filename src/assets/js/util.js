@@ -3,11 +3,14 @@
  * 洗牌函数 | 打乱数组
  */
 export function shuffle(array) {
-  for (let i = 0; i < array.length; i++) {
+  // 复制一个数组
+  let _array = array.slice();
+
+  for (let i = 0; i < _array.length; i++) {
     let j = getRandomInt(0, i);
-    [array[i], array[j]] = [array[j], array[i]];
+    [_array[i], _array[j]] = [_array[j], _array[i]];
   }
-  return array;
+  return _array;
 }
 
 /*
