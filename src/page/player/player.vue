@@ -48,8 +48,8 @@
         <div class="bottom">
           <!-- 分页点 -->
           <section class="dot-wrapper">
-            <span class="dot"></span>
-            <span class="dot"></span>
+            <span class="dot" :class="{ active: currentDot === 'cd' }"></span>
+            <span class="dot" :class="{ active: currentDot === 'lyric' }"></span>
           </section>
 
           <!-- 播放进度 -->
@@ -139,7 +139,8 @@ export default {
       songCanPlay: false, // 定义歌曲播放 标志位
       currentTime: 0, // 当前播放时间
       currentLyric: null, // 当前歌曲的歌词
-      currentLyricLine: 0 // 当前播放的歌词在第几行
+      currentLyricLine: 0, // 当前播放的歌词在第几行
+      currentDot: 'cd' // 当前所处的分页
     };
   },
   computed: {
