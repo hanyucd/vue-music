@@ -24,7 +24,7 @@
           @touchend="middleTouchEnd"
         >
           <!-- 唱片 -->
-          <section class="middle-l">
+          <section class="middle-l" ref="middle_l">
             <div class="cd-wrapper">
               <div class="cd" :class="[ playing ? 'play' : 'play pause' ]">
                 <img :src="currentSong.image" class="image" />
@@ -401,12 +401,53 @@ export default {
       let left = this.currentDot === 'cd' ? 0 : -window.innerWidth;
       // 计算滑动的距离
       let offsetWidth = Math.min(0, Math.max(-window.innerWidth, left + distance_X));
+      // 计算滑动距离占屏幕宽的比例
+      this.touch.percent = Math.abs(offsetWidth / window.innerWidth);
+
       this.$refs.lyricList.$el.style['transform'] = `translate3d(${ offsetWidth }px, 0, 0)`;
+      // Move过程中 过渡效果坚持 0ms
+      this.$refs.lyricList.$el.style['transition-duration'] = 0;
+      // 设置 cd 唱片图 | 背景模糊
+      this.$refs.middle_l.style.opacity = 1 - this.touch.percent;
+      this.$refs.middle_l.style['transition-duration'] = 0;
     },
     /*
      * 滑动切换唱片/歌词 | 当手指从屏幕上离开时触发
      */
-    middleTouchEnd(event) {}
+    middleTouchEnd(event) {
+      let offsetWidth;
+      let opacity;
+
+      if (this.currentDot === 'cd') {
+        // 向左滑 | 滑动距离大于屏幕宽度 20% 执行
+        if (this.touch.percent > 0.2) {
+          offsetWidth = -window.innerWidth;
+          this.currentDot = 'lyric';
+          opacity = 0;
+        } else {
+          offsetWidth = 0;
+          opacity = 1;
+        }
+      } else {
+        // 向右滑 | 滑动距离小于屏幕宽度 80% 执行
+        if (this.touch.percent < 0.8) {
+          offsetWidth = 0;
+          this.currentDot = 'cd';
+          opacity = 1;
+        } else {
+          offsetWidth = -window.innerWidth;
+          opacity = 0;
+        }
+      }
+
+      // 定义过渡时间 500 ms
+      const duration = 500;
+      this.$refs.lyricList.$el.style['transform'] = `translate3d(${ offsetWidth }px, 0, 0)`;
+      this.$refs.lyricList.$el.style['transition'] = `all ${ duration }ms linear`;
+      // 设置 cd 唱片图 | 背景模糊
+      this.$refs.middle_l.style.opacity = opacity;
+      this.$refs.middle_l.style['transition'] = `all ${ duration }ms linear`;
+    }
   }
 };
 </script>
