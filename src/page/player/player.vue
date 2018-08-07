@@ -17,7 +17,12 @@
           <h2 class="subtitle" v-html="currentSong.singer"></h2>
         </div>
         <!-- 播放器中间 -->
-        <div class="middle">
+        <div
+          class="middle"
+          @touchstart.prevent="middleTouchStart"
+          @touchmove.prevent ="middleTouchMove"
+          @touchend="middleTouchEnd"
+        >
           <!-- 唱片 -->
           <section class="middle-l">
             <div class="cd-wrapper">
@@ -195,6 +200,10 @@ export default {
       });
     }
   },
+  created() {
+    // 维护一个滑动状态对象
+    this.touch = {};
+  },
   methods: {
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
@@ -367,7 +376,37 @@ export default {
       } else {
         this.$refs.lyricList.scrollTo(0, 0, 1000);
       }
-    }
+    },
+    /*
+     * 滑动切换唱片/歌词 | 当手指放在屏幕上触发
+     */
+    middleTouchStart(event) {
+      this.touch.init = true;
+      // 记录开始滑动的位置
+      this.touch.start_X = event.touches[0].pageX;
+      this.touch.start_Y = event.touches[0].pageY;
+    },
+    /*
+     * 滑动切换唱片/歌词 | 当手指在屏幕上滑动时，连续地触发
+     */
+    middleTouchMove(event) {
+      if (!this.touch.init) return;
+
+      // 计算滑动的差值
+      let distance_X = event.touches[0].pageX - this.touch.start_X;
+      let distance_Y = event.touches[0].pageX - this.touch.start_Y;
+
+      if (Math.abs(distance_X) < Math.abs(distance_Y)) return;
+
+      let left = this.currentDot === 'cd' ? 0 : -window.innerWidth;
+      // 计算滑动的距离
+      let offsetWidth = Math.min(0, Math.max(-window.innerWidth, left + distance_X));
+      this.$refs.lyricList.$el.style['transform'] = `translate3d(${ offsetWidth }px, 0, 0)`;
+    },
+    /*
+     * 滑动切换唱片/歌词 | 当手指从屏幕上离开时触发
+     */
+    middleTouchEnd(event) {}
   }
 };
 </script>
