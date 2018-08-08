@@ -186,9 +186,13 @@ export default {
     currentSong(newSong, oldSong) {
       if (newSong.id === oldSong.id) return;
 
+      // 切歌时，停止当前歌词
+      if (this.currentLyric) {
+        this.currentLyric.stop();
+      }
+
       this.$nextTick(() => {
         this.$refs.audio.play();
-
         this._fetchLyric();
       });
     },
@@ -229,6 +233,11 @@ export default {
      */
     togglePlaying() {
       this.setPlayingState(!this.playing);
+
+      // 暂停时，歌词也暂停
+      if (this.currentLyric) {
+        this.currentLyric.togglePlay();
+      }
     },
     /*
      * 切换下一首歌
@@ -236,14 +245,20 @@ export default {
     nextSong() {
       if (!this.songCanPlay) return;
 
-      let index = this.currentIndex + 1;
-      if (index === this.playlist.length) {
-        index = 0;
+      // 如果播放列表只要一条数据
+      if (this.playlist.length === 1) {
+        this.loopSong();
+      } else {
+        let index = this.currentIndex + 1;
+        if (index === this.playlist.length) {
+          index = 0;
+        }
+        this.setCurrentIndex(index);
+        if (!this.playing) {
+          this.togglePlaying();
+        }
       }
-      this.setCurrentIndex(index);
-      if (!this.playing) {
-        this.togglePlaying();
-      }
+
       this.songCanPlay = false;
     },
     /*
@@ -297,6 +312,10 @@ export default {
     loopSong() {
       this.$refs.audio.currentTime = 0;
       this.$refs.audio.play();
+      // 单曲循环时，歌词也单曲循环
+      if (this.currentLyric) {
+        this.currentLyric.seek(0);
+      }
     },
     /*
      * 格式化歌曲时长
@@ -320,10 +339,15 @@ export default {
      * 监听子组件派发的事件 | 重设歌曲播放位置
      */
     onPercentChange(percent) {
-      this.$refs.audio.currentTime = percent * this.currentSong.duration;
+      let currentTime = percent * this.currentSong.duration;
+      this.$refs.audio.currentTime = currentTime;
       // 进度改变后自动播放
       if (!this.playing) {
         this.togglePlaying();
+      }
+
+      if (this.currentLyric) {
+        this.currentLyric.seek(currentTime * 1000);
       }
     },
     /*
@@ -361,8 +385,10 @@ export default {
         if (this.playing) {
           this.currentLyric.play();
         }
+      }).catch(() => {
+        this.currentLyric = null;
+        this.currentLyricLine = 0;
       });
-      console.log(this.currentLyric);
     },
     /*
      * new Lyric() 的回调函数
