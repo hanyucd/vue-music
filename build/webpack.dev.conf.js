@@ -62,7 +62,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       app.get('/api/getDiscList', function(req, res) {
         let url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg';
 
-        console.log(`\n ${ __filename }: 进入歌单请求后台代理...`);
+        console.log(`\n ${ __filename }: 进入首页歌单列表请求后台代理...`);
         // 歌单列表代理
         axios.get(url, {
           headers: {
@@ -73,7 +73,34 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         }).then(response => {
           res.json(response.data);
         }).catch(error => {
-          console.log('歌单后台代理失败:', error);
+          console.log('歌单列表后台代理失败:', error);
+        });
+      });
+
+      app.get('/api/getSongList', function (req, res) {
+        let url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
+
+        console.log(`\n ${ __filename }: 进入歌单详情请求后台代理...`);
+        // 歌单详情代理
+        axios.get(url, {
+          headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then(response => {
+          let ret = response.data;
+          // jsonp 数据转为 json 数据
+          if (typeof ret === 'string') {
+            let reg = /^\w+\(({[^()]+})\)$/;
+            let matches = ret.match(reg);
+            if (matches) {
+              ret = JSON.parse(matches[1]);
+            }
+          }
+          res.json(ret)
+        }).catch((error) => {
+          console.log('歌单详情后台代理失败:', error);
         });
       });
 
@@ -102,7 +129,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           res.json(ret);
         }).catch(error => {
           console.log('歌词后台代理失败:', error);
-        })
+        });
       });
     }
   },
