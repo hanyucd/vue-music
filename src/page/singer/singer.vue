@@ -1,6 +1,6 @@
 <template>
-  <div id="singer">
-    <list-view :singerData="singerList" v-on:select="selectSinger"></list-view>
+  <div id="singer" ref="singer">
+    <list-view ref="listview" :singerData="singerList" v-on:select="selectSinger"></list-view>
     <router-view></router-view>
   </div>
 </template>
@@ -14,10 +14,15 @@ import ListView from './listview/listview';
 
 import { mapMutations } from 'vuex';
 
+import { playlistMixin } from '@/assets/js/mixin';
+
 const HOT_NAME = '热门';
 const HOT_SINGER_LEN = 10;
 
 export default {
+  mixins: [
+    playlistMixin
+  ],
   components: {
     ListView
   },
@@ -30,6 +35,12 @@ export default {
     this._fetchSingerData();
   },
   methods: {
+    /*
+     *  vuex | mutations
+     */
+    ...mapMutations({
+      setSinger: 'SET_SINGER'
+    }),
     /*
      * 获取歌手列表数据
      */
@@ -98,11 +109,13 @@ export default {
       this.setSinger(singer);
     },
     /*
-     *  vuex | mutations
+     *当有迷你播放器时，调整滚动底部距离
      */
-    ...mapMutations({
-      setSinger: 'SET_SINGER'
-    })
+    handlePlaylist(playlist) {
+      let bottom = playlist.length > 0 ? '60px' : '';
+      this.$refs.singer.style.bottom = bottom;
+      this.$refs.listview.refresh();
+    }
   }
 };
 </script>

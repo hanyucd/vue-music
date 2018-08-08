@@ -1,5 +1,5 @@
 <template>
-  <div id="recommend">
+  <div id="recommend" ref="recommend">
     <scroll class="recommend-content" ref="scroll" :data="discList">
       <article>
         <!-- 轮播图 | 当请求到 recommends 时才渲染-->
@@ -45,7 +45,12 @@ import Loading from '@/components/loading/loading';
 import { getRecommend, getDiscList } from '@/api/recommend';
 import { ERROR_OK } from '@/api/config';
 
+import { playlistMixin } from '@/assets/js/mixin';
+
 export default {
+  mixins: [
+    playlistMixin
+  ],
   components: {
     Slider,
     Scroll,
@@ -86,6 +91,14 @@ export default {
         this.$refs.scroll.refresh();
         this.flag = true;
       }
+    },
+    /*
+     *当有迷你播放器时，调整滚动底部距离
+     */
+    handlePlaylist(playlist) {
+      let bottom = playlist.length > 0 ? '60px' : '';
+      this.$refs.recommend.style.bottom = bottom;
+      this.$refs.scroll.refresh();
     }
   }
 };

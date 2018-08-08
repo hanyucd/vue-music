@@ -47,10 +47,15 @@ import SongList from '@/components/song_list/song_list';
 
 import { mapActions } from 'vuex';
 
+import { playlistMixin } from '@/assets/js/mixin';
+
 // 为推层预留顶部高度
 const RESERVED_HEIGHT = 40;
 
 export default {
+  mixins: [
+    playlistMixin
+  ],
   components: {
     Scroll,
     Loading,
@@ -159,6 +164,14 @@ export default {
       this.randomPlay({
         list: this.songs
       });
+    },
+    /*
+     *当有迷你播放器时，调整滚动底部距离
+     */
+    handlePlaylist(playlist) {
+      let bottom = playlist.length > 0 ? '60px' : '';
+      this.$refs.list.$el.style.bottom = bottom;
+      this.$refs.list.refresh();
     }
   }
 };

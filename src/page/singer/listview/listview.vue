@@ -198,6 +198,12 @@ export default {
      */
     selectItem(item) {
       this.$emit('select', item);
+    },
+    /*
+     * 对父亲提供的刷新 better-scroll 方法
+     */
+    refresh() {
+      this.$refs.listview.refresh();
     }
   }
 };
