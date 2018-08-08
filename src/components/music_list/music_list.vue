@@ -30,7 +30,7 @@
       :listenScroll="listenScroll"
      >
       <div class="song-wrapper">
-        <song-list :songs="songs" v-on:select="select"></song-list>
+        <song-list :songs="songs" :rank="rank" v-on:select="select"></song-list>
       </div>
       <!-- loading 组件 -->
       <article class="loading-container" v-show="!songs.length">
@@ -75,6 +75,10 @@ export default {
     title: {
       type: String,
       default: ''
+    },
+    rank: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
