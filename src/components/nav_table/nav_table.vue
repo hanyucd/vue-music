@@ -16,7 +16,7 @@ export default {
       nav: {
         recommend: '推荐',
         singer: '歌手',
-        rankList: '排行',
+        rankList: '排行榜',
         search: '搜索'
       }
     };
