@@ -25,6 +25,9 @@ const mutations = {
   },
   [types.SET_SONG_LIST](state, songList) {
     state.songList = songList;
+  },
+  [types.SET_RANK_LIST](state, rankList) {
+    state.rankList = rankList;
   }
 };
 

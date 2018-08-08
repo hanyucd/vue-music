@@ -18,3 +18,5 @@ export const currentSong = state => {
 };
 
 export const songList = state => state.songList;
+
+export const rankList = state => state.rankList;

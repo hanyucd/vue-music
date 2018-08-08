@@ -13,7 +13,8 @@ const state = {
   sequenceList: [], // 顺序播放列表
   mode: playMode.sequence, // 播放模式
   currentIndex: -1, // 当前播放歌曲索引
-  songList: {} // 推荐页歌单
+  songList: {}, // 推荐页歌单
+  rankList: {} // 歌曲排行数据
 };
 
 export default state;

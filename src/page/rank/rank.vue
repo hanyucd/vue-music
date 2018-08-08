@@ -2,7 +2,7 @@
   <div id="rank_list" ref="rank">
     <scroll class="top-list" :data="rankList" ref="rank_list">
       <ul>
-        <li class="item" v-for="item of rankList" :key="item.id">
+        <li class="item" v-for="item of rankList" :key="item.id" @click="selectItem(item)">
            <!-- 左边图片 -->
           <div class="icon">
             <img width="100" height="100" v-lazy="item.picUrl"/>
@@ -35,6 +35,8 @@ import { ERROR_OK } from '@/api/config';
 import Scroll from '@/components/scroll/scroll';
 import Loading from '@/components/loading/loading';
 
+import { mapMutations } from 'vuex';
+
 import { playlistMixin } from '@/assets/js/mixin';
 
 export default {
@@ -54,12 +56,25 @@ export default {
     this._fetchRankList();
   },
   methods: {
+    ...mapMutations({
+      setRankList: 'SET_RANK_LIST'
+    }),
     _fetchRankList() {
       getRankList().then(res => {
         if (res.code === ERROR_OK) {
           this.rankList = res.data.topList;
         }
       });
+    },
+    /*
+     * 路由跳转
+     */
+    selectItem(item) {
+      this.$router.push({
+        path: `/rank/${ item.id }`
+      });
+      // 写入 vuex
+      this.setRankList(item);
     },
     /*
      * 当有迷你播放器时，调整滚动底部距离
@@ -74,5 +89,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import './rank_list.scss';
+  @import './rank.scss';
 </style>
