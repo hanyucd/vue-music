@@ -11,7 +11,7 @@ import { createSong } from '@/assets/js/song';
 
 import { mapGetters } from 'vuex';
 
-import MusicList from './music_list/music_list';
+import MusicList from '@/components/music_list/music_list';
 
 export default {
   components: {

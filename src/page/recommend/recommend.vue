@@ -17,7 +17,7 @@
         <section class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul>
-            <li class="item" v-for="(item, index) in discList" :key="index">
+            <li class="item" v-for="(item, index) in discList" :key="index" @click="selectItem(item)">
               <div class="icon">
                 <img v-lazy="item.imgurl" width="60" height="60" />
               </div>
@@ -34,18 +34,23 @@
         <loading></loading>
       </article>
     </scroll>
+
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
+// 导入子组件
 import Slider from './slider/slider';
 import Scroll from '@/components/scroll/scroll';
 import Loading from '@/components/loading/loading';
-
+// 导入数据接口
 import { getRecommend, getDiscList } from '@/api/recommend';
 import { ERROR_OK } from '@/api/config';
-
+// 导入 mixin (混入)
 import { playlistMixin } from '@/assets/js/mixin';
+// 导入 vuex
+import { mapMutations } from 'vuex';
 
 export default {
   mixins: [
@@ -69,6 +74,9 @@ export default {
     }, 2000);
   },
   methods: {
+    ...mapMutations({
+      setSongList: 'SET_SONG_LIST'
+    }),
     // 获取顶部轮播图数据
     _fetchRecommend() {
       getRecommend().then(res => {
@@ -91,6 +99,16 @@ export default {
         this.$refs.scroll.refresh();
         this.flag = true;
       }
+    },
+    /*
+     * 子路由跳转
+     */
+    selectItem(item) {
+      this.$router.push({
+        path: `recommend/${ item.dissid }`
+      });
+      // 写入 vuex 中
+      this.setSongList(item);
     },
     /*
      *当有迷你播放器时，调整滚动底部距离

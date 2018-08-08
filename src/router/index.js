@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import Recommend from '@/page/recommend/recommend'; // 推荐页面
+import RecommendSongList from '@/page/recommend_songList/recommend_songList'; // 推荐页面
 
 import Singer from '@/page/singer/singer'; // 歌手页面
 import SingerDetail from '@/page/singer_detail/singer_detail'; // 歌手详情页面
@@ -21,7 +22,14 @@ export default new Router({
     {
       path: '/recommend',
       name: 'recommend',
-      component: Recommend
+      component: Recommend,
+      // 子路由
+      children: [
+        {
+          path: ':id',
+          component: RecommendSongList
+        }
+      ]
     },
     {
       path: '/singer',
