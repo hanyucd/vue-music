@@ -19,8 +19,8 @@
         <!-- 播放器中间 -->
         <div
           class="middle"
-          @touchstart.prevent="middleTouchStart"
-          @touchmove.prevent ="middleTouchMove"
+          @touchstart="middleTouchStart"
+          @touchmove ="middleTouchMove"
           @touchend="middleTouchEnd"
         >
           <!-- 唱片 -->
@@ -407,8 +407,8 @@ export default {
       this.$refs.lyricList.$el.style['transform'] = `translate3d(${ offsetWidth }px, 0, 0)`;
       // Move过程中 过渡效果坚持 0ms
       this.$refs.lyricList.$el.style['transition-duration'] = 0;
-      // 设置 cd 唱片图 | 背景模糊
-      this.$refs.middle_l.style.opacity = 1 - this.touch.percent;
+      // 设置 cd 唱片图位移
+      this.$refs.middle_l.style['transform'] = `translate3d(${ offsetWidth }px, 0, 0)`;
       this.$refs.middle_l.style['transition-duration'] = 0;
     },
     /*
@@ -416,27 +416,22 @@ export default {
      */
     middleTouchEnd(event) {
       let offsetWidth;
-      let opacity;
 
       if (this.currentDot === 'cd') {
         // 向左滑 | 滑动距离大于屏幕宽度 20% 执行
         if (this.touch.percent > 0.2) {
           offsetWidth = -window.innerWidth;
           this.currentDot = 'lyric';
-          opacity = 0;
         } else {
           offsetWidth = 0;
-          opacity = 1;
         }
       } else {
         // 向右滑 | 滑动距离小于屏幕宽度 80% 执行
         if (this.touch.percent < 0.8) {
           offsetWidth = 0;
           this.currentDot = 'cd';
-          opacity = 1;
         } else {
           offsetWidth = -window.innerWidth;
-          opacity = 0;
         }
       }
 
@@ -444,8 +439,8 @@ export default {
       const duration = 500;
       this.$refs.lyricList.$el.style['transform'] = `translate3d(${ offsetWidth }px, 0, 0)`;
       this.$refs.lyricList.$el.style['transition'] = `all ${ duration }ms linear`;
-      // 设置 cd 唱片图 | 背景模糊
-      this.$refs.middle_l.style.opacity = opacity;
+      // 设置 cd 唱片图位移
+      this.$refs.middle_l.style['transform'] = `translate3d(${ offsetWidth }px, 0, 0)`;
       this.$refs.middle_l.style['transition'] = `all ${ duration }ms linear`;
     }
   }
