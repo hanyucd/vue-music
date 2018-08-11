@@ -4,4 +4,34 @@
   .search-box-wrapper {
     margin: 20px;
   }
+  .shortcut-wrapper {
+    position: fixed;
+    top: 178px;
+    bottom: 0;
+    width: 100%;
+    .shortcut {
+      height: 100%;
+      overflow: hidden;
+      .hot-key {
+        margin: 0 20px 20px 20px;
+        .title {
+          margin-bottom: 20px;
+          font-size: $font-size-medium;
+          color: $color-text-l;
+        }
+        .item {
+          display: inline-block;
+          padding: 5px 10px;
+          margin: 0 20px 10px 0;
+          border-radius: 6px;
+          background: $color-highlight-background;
+          font-size: $font-size-medium;
+          color: $color-text-d;
+          &.special {
+            color: rgba(255, 255, 255, .7);
+          }
+        }
+      }
+    }
+  }
 }

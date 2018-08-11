@@ -30,6 +30,12 @@ export default {
      */
     clear() {
       this.query = '';
+    },
+    /*
+     * 提供父组件用的，传入到搜索框的值
+     */
+    setQuery(query) {
+      this.query = query;
     }
   }
 };
