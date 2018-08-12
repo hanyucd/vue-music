@@ -16,6 +16,8 @@
 <script>
 import { search } from '@/api/search';
 
+import { createSong, isValidMusic, processSongsUrl } from '@/assets/js/song';
+
 const TYPE_SINGER = 'singer';
 
 export default {
@@ -46,10 +48,11 @@ export default {
   methods: {
     _search() {
       search(this.query, this.page, this.zhida, this.perpage).then(res => {
-        console.log(res);
         if (res.code === 0) {
-          // this.result = this._formatSearchResutl(res.data);
-          console.log(res.data);
+          this._formatSearchResutl(res.data).then(result => {
+            this.result = this.result.concat(result);
+          });
+          console.log('hanyu: ', this.result);
         }
       });
     },
@@ -63,9 +66,22 @@ export default {
         ret.push({...data.zhida, ...{ type: TYPE_SINGER }});
       }
 
-      if (data.song) {
-        ret = ret.concat(data.song.list);
-      }
+      return processSongsUrl(this._normalizeSongs(data.song.list)).then(songs => {
+        ret = ret.concat(songs);
+        return ret;
+      });
+    },
+    /*
+     * 格式化歌手信息
+     */
+    _normalizeSongs(list) {
+      let ret = [];
+
+      list.forEach(musicData => {
+        if (isValidMusic(musicData)) {
+          ret.push(createSong(musicData));
+        }
+      });
 
       return ret;
     },

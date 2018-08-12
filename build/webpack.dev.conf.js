@@ -77,6 +77,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         });
       });
 
+      // 获取首页歌单详情数据
       app.get('/api/getSongList', function (req, res) {
         let url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
 
@@ -129,6 +130,41 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           res.json(ret);
         }).catch(error => {
           console.log('歌词后台代理失败:', error);
+        });
+      });
+
+      // 歌曲搜索
+      app.get('/api/search', function(req, res) {
+        let url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp';
+
+        console.log(`\n ${ __filename }: 进入歌曲搜索请求后台代理...`);
+        // 歌曲搜索代理
+        axios.get(url, {
+          headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then(response => {
+          res.json(response.data);
+        }).catch(error => {
+          console.log('歌曲搜索后台代理失败:', error);
+        });
+      });
+
+      app.post('/api/getPurlUrl', bodyParser.json(), function (req, res) {
+        let url = 'https://u.y.qq.com/cgi-bin/musicu.fcg';
+
+        axios.post(url, req.body, {
+          headers: {
+            referer: 'https://y.qq.com/',
+            origin: 'https://y.qq.com',
+            'Content-type': 'application/x-www-form-urlencoded'
+          }
+        }).then((response) => {
+          res.json(response.data);
+        }).catch(error => {
+          console.log(error);
         });
       });
     }
