@@ -52,7 +52,6 @@ export default {
           this._formatSearchResutl(res.data).then(result => {
             this.result = this.result.concat(result);
           });
-          console.log('hanyu: ', this.result);
         }
       });
     },
@@ -62,7 +61,7 @@ export default {
     _formatSearchResutl(data) {
       let ret = [];
 
-      if (data.zhida && data.zhida.singerid) {
+      if (data.zhida && this.page === 1) {
         ret.push({...data.zhida, ...{ type: TYPE_SINGER }});
       }
 
@@ -79,10 +78,11 @@ export default {
 
       list.forEach(musicData => {
         if (isValidMusic(musicData)) {
-          ret.push(createSong(musicData));
+          createSong(musicData).then(data => {
+            ret.push(data);
+          });
         }
       });
-
       return ret;
     },
     /*

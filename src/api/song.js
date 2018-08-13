@@ -33,6 +33,7 @@ export function getLyric(mid) {
 const debug = process.env.NODE_ENV !== 'production';
 
 export function getSongsUrl(songs) {
+  console.log("api/songs", '执行了');
   const url = debug ? '/api/getPurlUrl' : 'http://ustbhuangyi.com/music/api/getPurlUrl';
 
   let mids = [];

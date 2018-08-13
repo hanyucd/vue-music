@@ -155,6 +155,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       app.post('/api/getPurlUrl', bodyParser.json(), function (req, res) {
         let url = 'https://u.y.qq.com/cgi-bin/musicu.fcg';
 
+        console.log(`\n ${ __filename }: 进入歌曲URL请求后台代理...`);
+
         axios.post(url, req.body, {
           headers: {
             referer: 'https://y.qq.com/',
