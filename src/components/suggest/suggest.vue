@@ -41,7 +41,8 @@ export default {
     };
   },
   watch: {
-    query() {
+    query(newQuery) {
+      if (!newQuery) return;
       this._search();
     }
   },
@@ -49,8 +50,8 @@ export default {
     _search() {
       search(this.query, this.page, this.zhida, this.perpage).then(res => {
         if (res.code === 0) {
-          this._formatSearchResutl(res.data).then(result => {
-            this.result = this.result.concat(result);
+          this._formatSearchResult(res.data).then(result => {
+            this.result = result;
           });
         }
       });
@@ -58,31 +59,35 @@ export default {
     /*
      * 重组 res.data 数据
      */
-    _formatSearchResutl(data) {
+    async _formatSearchResult(data) {
       let ret = [];
 
-      if (data.zhida && this.page === 1) {
+      if (data.zhida && data.zhida.singerid && this.page === 1) {
         ret.push({...data.zhida, ...{ type: TYPE_SINGER }});
       }
 
-      return processSongsUrl(this._normalizeSongs(data.song.list)).then(songs => {
+      // 获取格式化后的歌曲信息
+      let formatSongs = await this._normalizeSongs(data.song.list);
+
+      return processSongsUrl(formatSongs).then(songs => {
         ret = ret.concat(songs);
         return ret;
       });
     },
     /*
-     * 格式化歌手信息
+     * 格式化歌曲信息
      */
-    _normalizeSongs(list) {
+    async _normalizeSongs(list) {
       let ret = [];
 
-      list.forEach(musicData => {
+      for (let musicData of list) {
         if (isValidMusic(musicData)) {
-          createSong(musicData).then(data => {
-            ret.push(data);
-          });
+          let data = await createSong(musicData);
+          ret.push(data);
         }
-      });
+      }
+      console.log('结果长度：', ret.length);
+      console.log('结果:', ret);
       return ret;
     },
     /*
