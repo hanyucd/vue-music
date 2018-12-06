@@ -37,12 +37,15 @@ export default {
     return {
       page: 1, // 当前检索页数，用于下拉加载
       perpage: 20, // 每一页的数量
-      result: [] // 接受搜索结果
+      result: [] // 存放搜索结果
     };
   },
   watch: {
     query(newQuery) {
-      if (!newQuery) return;
+      if (!newQuery) {
+        this.result = [];
+        return;
+      }
       this._search();
     }
   },
