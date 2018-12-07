@@ -31,6 +31,11 @@ export default {
     pullup: {
       type: Boolean,
       default: false
+    },
+    // 滚动前是否触发事件，如：滚动前让输入框失去焦点，避免滚动搜索结果时移动端键盘遮挡
+    beforeScroll: {
+      type: Boolean,
+      default: false
     }
   },
   watch: {
@@ -56,6 +61,7 @@ export default {
         probeType: this.probeType,
         click: this.click
       });
+
       // 监听 better-scroll 滚动事件 | 派发自定义事件
       if (this.listenScroll) {
         let self = this;
@@ -65,7 +71,7 @@ export default {
           self.$emit('scroll', pos);
         });
       }
-
+      // 监听 better-scroll 滚动到底部事件 | 派发自定义事件
       if (this.pullup) {
         // better-scroll 滚动结束时（滚动到底部）触发
         this.scroll.on('scrollEnd', () => {
@@ -73,6 +79,12 @@ export default {
             // 向父组件派发事件
             this.$emit('scrollToEnd');
           }
+        });
+      }
+      // 监听 better-scroll 滚动开始之前 | 派发自定义事件
+      if (this.beforeScroll) {
+        this.scroll.on('beforeScrollStart', () => {
+          this.$emit('beforeScroll');
         });
       }
     },

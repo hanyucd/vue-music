@@ -20,7 +20,7 @@
     </div>
 
     <article class="search-result" v-show="query">
-      <suggest :query="query"></suggest>
+      <suggest :query="query" v-on:beforeScroll="blurInput"></suggest>
     </article>
   </div>
 </template>
@@ -67,6 +67,10 @@ export default {
      */
     onQueryChange(query) {
       this.query = query;
+    },
+    // 滚动前触发事件
+    blurInput() {
+      this.$refs.searchBox.blur();
     }
   }
 };

@@ -4,7 +4,9 @@
     ref="suggest"
     :data="result"
     :pullup="pullup"
+    :beforeScroll="beforeScroll"
     v-on:scrollToEnd="_searchMore"
+    v-on:beforeScroll="handleBeforeScroll"
   >
     <ul class="suggest-list">
       <li class="suggest-item" v-for="(item, index) in result" :key="index" @click="selectItem(item)">
@@ -60,7 +62,8 @@ export default {
       perpage: 20, // 每一页的数量
       result: [], // 存放搜索结果
       pullup: true, // 滚动到底部，下拉加载
-      hasMore: true // 标识符 | 是否加载完
+      hasMore: true, // 标识符 | 是否加载完
+      beforeScroll: true
     };
   },
   watch: {
@@ -93,7 +96,6 @@ export default {
         if (res.code === 0) {
           this._formatSearchResult(res.data).then(result => {
             this.result = result;
-            console.log('结果：', this.result);
           });
           this._checkMore(res.data);
         }
@@ -173,6 +175,9 @@ export default {
       } else {
         this.insertSong(item);
       }
+    },
+    handleBeforeScroll() {
+      this.$emit('beforeScroll');
     },
     /*
      * 获取 icon class 图标样式
