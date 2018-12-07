@@ -1,5 +1,11 @@
 <template>
-  <div id="suggest">
+  <scroll
+    id="suggest"
+    ref="suggest"
+    :data="result"
+    :pullup="pullup"
+    v-on:scrollToEnd="_searchMore"
+  >
     <ul class="suggest-list">
       <li class="suggest-item" v-for="(item, index) in result" :key="index">
         <div class="icon">
@@ -9,18 +15,24 @@
           <p class="text" v-html="getDisplayName(item)"></p>
         </div>
       </li>
+      <loading v-show="hasMore" title="加载中..."></loading>
     </ul>
-  </div>
+  </scroll>
 </template>
 
 <script>
+import Scroll from '../scroll/scroll';
+import Loading from '../loading/loading';
 import { search } from '@/api/search';
-
 import { createSong, isValidMusic, processSongsUrl } from '@/assets/js/song';
 
 const TYPE_SINGER = 'singer';
 
 export default {
+  components: {
+    Scroll,
+    Loading
+  },
   props: {
     // 接受的检索值
     query: {
@@ -37,7 +49,9 @@ export default {
     return {
       page: 1, // 当前检索页数，用于下拉加载
       perpage: 20, // 每一页的数量
-      result: [] // 存放搜索结果
+      result: [], // 存放搜索结果
+      pullup: true, // 滚动到底部，下拉加载
+      hasMore: true // 标识符 | 是否加载完
     };
   },
   watch: {
@@ -50,12 +64,38 @@ export default {
     }
   },
   methods: {
+    /*
+     * 发送搜索关键字请求
+     */
     _search() {
+      this.page = 1;
+      this.result = []; // 初始化为空数组
+      this.hasMore = true;
+      // 滚动到指定的位置 | 顶部
+      this.$refs.suggest.scrollTo(0, 0);
+
       search(this.query, this.page, this.zhida, this.perpage).then(res => {
         if (res.code === 0) {
           this._formatSearchResult(res.data).then(result => {
             this.result = result;
           });
+          this._checkMore(res.data);
+        }
+      });
+    },
+    /*
+     * 加载更多搜索内容
+     */
+    _searchMore() {
+      if (!this.hasMore) return;
+
+      this.page++;
+      search(this.query, this.page, this.zhida, this.perpage).then(res => {
+        if (res.code === 0) {
+          this._formatSearchResult(res.data).then(result => {
+            this.result = [...this.result, ...result];
+          });
+          this._checkMore(res.data);
         }
       });
     },
@@ -92,6 +132,16 @@ export default {
       console.log('结果长度：', ret.length);
       console.log('结果:', ret);
       return ret;
+    },
+    /*
+     * 检查是否还有更多数据
+     */
+    _checkMore(data) {
+      let song = data.song;
+      // 没有数据 或 最后一页
+      if (!song.list.length || (song.curnum + song.curpage * this.perpage) >= song.totalnum) {
+        this.hasMore = false;
+      }
     },
     /*
      * 获取 icon class 图标样式

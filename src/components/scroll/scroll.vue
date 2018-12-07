@@ -26,6 +26,11 @@ export default {
     listenScroll: {
       type: Boolean,
       default: false
+    },
+    // 是否开启上拉加载
+    pullup: {
+      type: Boolean,
+      default: false
     }
   },
   watch: {
@@ -58,6 +63,16 @@ export default {
         this.scroll.on('scroll', (pos) => {
           // 向父组件派发事件
           self.$emit('scroll', pos);
+        });
+      }
+
+      if (this.pullup) {
+        // better-scroll 滚动结束时（滚动到底部）触发
+        this.scroll.on('scrollEnd', () => {
+          if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+            // 向父组件派发事件
+            this.$emit('scrollToEnd');
+          }
         });
       }
     },
