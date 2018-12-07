@@ -7,7 +7,7 @@
     v-on:scrollToEnd="_searchMore"
   >
     <ul class="suggest-list">
-      <li class="suggest-item" v-for="(item, index) in result" :key="index">
+      <li class="suggest-item" v-for="(item, index) in result" :key="index" @click="selectItem(item)">
         <div class="icon">
           <i :class="getIconCls(item)"></i>
         </div>
@@ -23,8 +23,11 @@
 <script>
 import Scroll from '../scroll/scroll';
 import Loading from '../loading/loading';
+
 import { search } from '@/api/search';
 import { createSong, isValidMusic, processSongsUrl } from '@/assets/js/song';
+import { Singer } from '@/assets/js/singer';
+import { mapMutations, mapActions } from 'vuex';
 
 const TYPE_SINGER = 'singer';
 
@@ -64,6 +67,12 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      setSinger: 'SET_SINGER'
+    }),
+    ...mapActions([
+      'insertSong'
+    ]),
     /*
      * 发送搜索关键字请求
      */
@@ -78,6 +87,7 @@ export default {
         if (res.code === 0) {
           this._formatSearchResult(res.data).then(result => {
             this.result = result;
+            console.log('结果：', this.result);
           });
           this._checkMore(res.data);
         }
@@ -129,8 +139,6 @@ export default {
           ret.push(data);
         }
       }
-      console.log('结果长度：', ret.length);
-      console.log('结果:', ret);
       return ret;
     },
     /*
@@ -141,6 +149,23 @@ export default {
       // 没有数据 或 最后一页
       if (!song.list.length || (song.curnum + song.curpage * this.perpage) >= song.totalnum) {
         this.hasMore = false;
+      }
+    },
+    /*
+     * 点击每条数据，路由跳转
+     */
+    selectItem(item) {
+      if (item.type === TYPE_SINGER) {
+        let singer = new Singer({
+          id: item.singermid,
+          name: item.singername
+        });
+        this.$router.push({
+          path: `/search/${ singer.id }`
+        });
+        this.setSinger(singer);
+      } else {
+        this.insertSong(item);
       }
     },
     /*

@@ -1,6 +1,6 @@
 
 // 创建一个歌手类
-class Singer {
+export class Singer {
   constructor({ id, name }) {
     this.id = id;
     this.name = name;
