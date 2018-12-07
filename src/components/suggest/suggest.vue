@@ -17,12 +17,17 @@
       </li>
       <loading v-show="hasMore" title="加载中..."></loading>
     </ul>
+
+    <article class="no-result-wrapper" v-if="!hasMore && !result.length">
+      <no-result></no-result>
+    </article>
   </scroll>
 </template>
 
 <script>
 import Scroll from '../scroll/scroll';
 import Loading from '../loading/loading';
+import NoResult from './no_result/no_result';
 
 import { search } from '@/api/search';
 import { createSong, isValidMusic, processSongsUrl } from '@/assets/js/song';
@@ -34,7 +39,8 @@ const TYPE_SINGER = 'singer';
 export default {
   components: {
     Scroll,
-    Loading
+    Loading,
+    NoResult
   },
   props: {
     // 接受的检索值
