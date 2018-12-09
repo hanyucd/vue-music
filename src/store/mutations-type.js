@@ -16,3 +16,5 @@ export const SET_CURRENT_INDEX = 'SET_CURRENT_INDEX';
 export const SET_SONG_LIST = 'SET_SONG_LIST';
 
 export const SET_RANK_LIST = 'SET_RANK_LIST';
+
+export const SET_SEARCH_HISTORY = 'SET_SEARCH_HISTORY';

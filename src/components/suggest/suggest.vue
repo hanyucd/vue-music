@@ -175,6 +175,8 @@ export default {
       } else {
         this.insertSong(item);
       }
+      // 派发事件
+      this.$emit('select');
     },
     handleBeforeScroll() {
       this.$emit('beforeScroll');

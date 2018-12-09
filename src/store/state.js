@@ -14,7 +14,8 @@ const state = {
   mode: playMode.sequence, // 播放模式
   currentIndex: -1, // 当前播放歌曲索引
   songList: {}, // 推荐页歌单
-  rankList: {} // 歌曲排行数据
+  rankList: {}, // 歌曲排行数据
+  searchHistory: []
 };
 
 export default state;
