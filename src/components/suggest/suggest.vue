@@ -197,6 +197,12 @@ export default {
       } else {
         return `${ item.name } - ${ item.singer }`;
       }
+    },
+    /*
+     * 提供给父组件使用
+     */
+    refresh() {
+      this.$refs.suggest.refresh();
     }
   }
 };

@@ -5,32 +5,34 @@
       <search-box ref="searchBox" v-on:query="onQueryChange"></search-box>
     </article>
 
-    <div class="shortcut-wrapper" v-show="!query">
-      <div class="shortcut">
-        <!-- 热门搜索 -->
-        <section class="hot-key">
-          <h1 class="title">热门搜索</h1>
-          <ul>
-            <li class="item" v-for="item of hotKey" :key="item.n" @click="addQuery(item.k)">
-              <span>{{ item.k }}</span>
-            </li>
-          </ul>
-        </section>
-        <!-- 搜索历史 -->
-        <section class="search-history" v-show="searchHistory.length">
-          <h1 class="title">
-            <span class="text">搜索历史</span>
-            <span class="clear" @click="showConfirm">
-              <i class="icon-clear"></i>
-            </span>
-          </h1>
-          <search-list :searches="searchHistory" v-on:select="addQuery" v-on:delete="deleteHistory"></search-list>
-        </section>
-      </div>
+    <div class="shortcut-wrapper" ref="shortcutWrapper" v-show="!query">
+      <scroll class="shortcut" ref="scroll" :data="shortcut">
+        <div>
+          <!-- 热门搜索 -->
+          <section class="hot-key">
+            <h1 class="title">热门搜索</h1>
+            <ul>
+              <li class="item" v-for="item of hotKey" :key="item.n" @click="addQuery(item.k)">
+                <span>{{ item.k }}</span>
+              </li>
+            </ul>
+          </section>
+          <!-- 搜索历史 -->
+          <section class="search-history" v-show="searchHistory.length">
+            <h1 class="title">
+              <span class="text">搜索历史</span>
+              <span class="clear" @click="showConfirm">
+                <i class="icon-clear"></i>
+              </span>
+            </h1>
+            <search-list :searches="searchHistory" v-on:select="addQuery" v-on:delete="deleteHistory"></search-list>
+          </section>
+        </div>
+      </scroll>
     </div>
 
-    <article class="search-result" v-show="query">
-      <suggest :query="query" v-on:beforeScroll="blurInput" v-on:select="saveSearch"></suggest>
+    <article class="search-result" ref="searchResult" v-show="query">
+      <suggest ref="suggest" :query="query" v-on:beforeScroll="blurInput" v-on:select="saveSearch"></suggest>
     </article>
 
     <confirm ref="confirm" text="确定清空历史记录" v-on:confirm="confirm" v-on:cancel="cancel"></confirm>
@@ -42,16 +44,20 @@ import SearchBox from '@/components/search_box/search_box';
 import Suggest from '@/components/suggest/suggest';
 import SearchList from '@/components/search_list/search_list';
 import Confirm from '@/components/confirm/confirm';
+import Scroll from '@/components/scroll/scroll';
 
 import { getHotKey } from '@/api/search';
 import { mapActions, mapGetters } from 'vuex';
+import { playlistMixin } from '@/assets/js/mixin';
 
 export default {
+  mixins: [playlistMixin],
   components: {
     SearchBox,
     Suggest,
     SearchList,
-    Confirm
+    Confirm,
+    Scroll
   },
   data() {
     return {
@@ -60,7 +66,20 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([ 'searchHistory' ])
+    ...mapGetters([ 'searchHistory' ]),
+    shortcut() {
+      return this.hotKey.concat(this.searchHistory);
+    }
+  },
+  watch: {
+    query(newVal) {
+      if (!newVal) {
+        // 解决添加歌曲后不能滚动的问题
+        setTimeout(() => {
+          this.$refs.scroll.refresh();
+        }, 20);
+      }
+    }
   },
   created() {
     this._getHotKey();
@@ -125,6 +144,18 @@ export default {
     * 取消清空搜索历史
     */
     cancel() {
+    },
+    /*
+     * 当有迷你播放器时，调整滚动底部距离
+     */
+    handlePlaylist(playlist) {
+      let bottom = playlist.length > 0 ? '60px' : 0;
+
+      this.$refs.shortcutWrapper.style.bottom = bottom;
+      this.$refs.scroll.refresh();
+
+      this.$refs.searchResult.style.bottom = bottom;
+      this.$refs.suggest.refresh();
     }
   }
 };
