@@ -1,3 +1,4 @@
+import { getSearch } from '@/assets/js/cache';
 
 const playMode = {
   sequence: 0, // 顺序播放
@@ -15,7 +16,7 @@ const state = {
   currentIndex: -1, // 当前播放歌曲索引
   songList: {}, // 推荐页歌单
   rankList: {}, // 歌曲排行数据
-  searchHistory: []
+  searchHistory: getSearch() // 搜索历史
 };
 
 export default state;

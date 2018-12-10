@@ -1,14 +1,20 @@
 import * as types from './mutations-type';
 import { shuffle } from '@/assets/js/util';
 
-// 查找索引
+import { saveSearch } from '@/assets/js/cache';
+
+/*
+ * 封装内部方法 | 查找索引
+ */
 function findIndex(list, song) {
   return list.findIndex(item => {
     return item.id === song.id;
   });
 }
 
-// 选择歌曲播放
+/*
+ * 选择歌曲播放 | Actions
+ */
 export const selectPlay = function({ commit, state }, { list, index }) {
   commit(types.SET_SEQUENCE_LIST, list);
   // 若当前播放模式为随机
@@ -24,7 +30,9 @@ export const selectPlay = function({ commit, state }, { list, index }) {
   commit(types.SET_PLAYING_STATE, true);
 };
 
-// 随机播放歌曲
+/*
+ * 随机播放歌曲 | Actions
+ */
 export const randomPlay = function({ commit }, { list }) {
   commit(types.SET_MODE, 2);
   commit(types.SET_SEQUENCE_LIST, list);
@@ -37,7 +45,9 @@ export const randomPlay = function({ commit }, { list }) {
   commit(types.SET_PLAYING_STATE, true);
 };
 
-// 新增歌曲到播放列表
+/*
+ * 新增歌曲到播放列表 | Actions
+ */
 export const insertSong = function({ commit, state }, song) {
   let playlist = state.playlist.slice();
   let sequenceList = state.sequenceList.slice();
@@ -82,7 +92,9 @@ export const insertSong = function({ commit, state }, song) {
   commit(types.SET_PLAYING_STATE, true);
 };
 
-// 保存搜索历史
+/*
+ * 保存搜索历史 | Actions
+ */
 export const saveSearchHistory = function({ commit }, query) {
-
+  commit(types.SET_SEARCH_HISTORY, saveSearch(query));
 };

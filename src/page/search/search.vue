@@ -31,6 +31,8 @@ import Suggest from '@/components/suggest/suggest';
 
 import { getHotKey } from '@/api/search';
 
+import { mapActions } from 'vuex';
+
 export default {
   components: {
     SearchBox,
@@ -46,6 +48,7 @@ export default {
     this._getHotKey();
   },
   methods: {
+    ...mapActions([ 'saveSearchHistory' ]),
     /*
      * 获取热搜索数据
      */
@@ -73,9 +76,11 @@ export default {
       this.$refs.searchBox.blur();
     },
     /*
-     *
+     * 触发保存搜索历史 Actions
      */
-    saveSearch() {}
+    saveSearch() {
+      this.saveSearchHistory(this.query);
+    }
   }
 };
 </script>
