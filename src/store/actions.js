@@ -1,7 +1,10 @@
 import * as types from './mutations-type';
 import { shuffle } from '@/assets/js/util';
-
-import { saveSearch } from '@/assets/js/cache';
+import {
+  saveSearch,
+  deleteSearch,
+  clearSearch
+} from '@/assets/js/cache';
 
 /*
  * 封装内部方法 | 查找索引
@@ -84,7 +87,6 @@ export const insertSong = function({ commit, state }, song) {
       sequenceList.splice(fsIndex + 1, 1);
     }
   }
-
   commit(types.SET_PLAY_LIST, playlist);
   commit(types.SET_SEQUENCE_LIST, sequenceList);
   commit(types.SET_CURRENT_INDEX, currentIndex);
@@ -97,4 +99,16 @@ export const insertSong = function({ commit, state }, song) {
  */
 export const saveSearchHistory = function({ commit }, query) {
   commit(types.SET_SEARCH_HISTORY, saveSearch(query));
+};
+/*
+ * 删除单个搜索历史 | Actions
+ */
+export const deleteSearchHistory = function({ commit }, query) {
+  commit(types.SET_SEARCH_HISTORY, deleteSearch(query));
+};
+/*
+ * 清空搜索历史 | Actions
+ */
+export const clearSearchHistory = function({ commit }) {
+  commit(types.SET_SEARCH_HISTORY, clearSearch());
 };
