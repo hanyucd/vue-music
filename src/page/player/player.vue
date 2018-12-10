@@ -111,6 +111,10 @@
         </div>
       </section>
     </transition>
+
+    <!-- 播放列表组件 -->
+    <play-list></play-list>
+
     <!-- 播放器 -->
     <audio
       ref="audio"
@@ -129,6 +133,7 @@ import { mapGetters, mapMutations } from 'vuex';
 // 导入子组件
 import ProgressBar from './progress_bar/progress_bar';
 import Scroll from '@/components/scroll/scroll';
+import PlayList from '@/page/play_list/play_list';
 // 导入工具函数
 import { shuffle } from '@/assets/js/util';
 // 导入第三方库
@@ -137,7 +142,8 @@ import Lyric from 'lyric-parser';
 export default {
   components: {
     ProgressBar,
-    Scroll
+    Scroll,
+    PlayList
   },
   data() {
     return {
