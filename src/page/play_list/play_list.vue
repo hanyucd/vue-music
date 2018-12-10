@@ -1,6 +1,6 @@
 <template>
   <transition name="list-fade">
-    <div id="play_list">
+    <div id="play_list" v-show="showFlag" @click="hide">
       <article class="list-wrapper">
         <section class="list-header">
           <h1 class="title">
@@ -34,7 +34,7 @@
           </div>
         </section>
 
-        <section class="list-close">
+        <section class="list-close" @click="hide">
           <span>关闭</span>
         </section>
       </article>
@@ -46,7 +46,16 @@
 export default {
   data() {
     return {
+      showFlag: false
     };
+  },
+  methods: {
+    show() {
+      this.showFlag = true;
+    },
+    hide() {
+      this.showFlag = false;
+    }
   }
 };
 </script>

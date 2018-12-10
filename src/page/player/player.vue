@@ -106,14 +106,14 @@
         <div class="control">
           <i :class="[ playing ? 'icon-pause-mini' : 'icon-play-mini' ]" @click.stop="togglePlaying"></i>
         </div>
-        <div class="control">
+        <div class="control" @click.stop="showPlayList">
           <i class="icon-playlist"></i>
         </div>
       </section>
     </transition>
 
     <!-- 播放列表组件 -->
-    <play-list></play-list>
+    <play-list ref="playList"></play-list>
 
     <!-- 播放器 -->
     <audio
@@ -474,6 +474,12 @@ export default {
       // 设置 cd 唱片图位移
       this.$refs.middle_l.style['transform'] = `translate3d(${ offsetWidth }px, 0, 0)`;
       this.$refs.middle_l.style['transition'] = `all ${ duration }ms linear`;
+    },
+    /*
+     * 显示播放列表
+     */
+    showPlayList() {
+      this.$refs.playList.show();
     }
   }
 };
