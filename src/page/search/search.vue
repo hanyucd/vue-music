@@ -16,6 +16,16 @@
             </li>
           </ul>
         </section>
+        <!-- 搜索历史 -->
+        <section class="search-history" v-show="searchHistory.length">
+          <h1 class="title">
+            <span class="text">搜索历史</span>
+            <span class="clear">
+              <i class="icon-clear"></i>
+            </span>
+          </h1>
+          <search-list></search-list>
+        </section>
       </div>
     </div>
 
@@ -28,21 +38,26 @@
 <script>
 import SearchBox from '@/components/search_box/search_box';
 import Suggest from '@/components/suggest/suggest';
+import SearchList from '@/components/search_list/search_list';
 
 import { getHotKey } from '@/api/search';
 
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   components: {
     SearchBox,
-    Suggest
+    Suggest,
+    SearchList
   },
   data() {
     return {
       hotKey: [], // / 热门搜索关键词
       query: '' // 搜索关键字
     };
+  },
+  computed: {
+    ...mapGetters([ 'searchHistory' ])
   },
   created() {
     this._getHotKey();

@@ -1,4 +1,5 @@
 @import '@/assets/scss/const.scss';
+@import '@/assets/scss/mymixin.scss';
 
 #search {
   .search-box-wrapper {
@@ -29,6 +30,25 @@
           color: $color-text-d;
           &.special {
             color: rgba(255, 255, 255, .7);
+          }
+        }
+      }
+      .search-history {
+        position: relative;
+        margin: 0 20px;
+        .title {
+          display: flex;
+          align-items: center;
+          height: 40px;
+          font-size: $font-size-medium;
+          color: $color-text-l;
+          .text { flex: 1; }
+          .clear {
+            @include extend-click();
+            .icon-clear {
+              font-size: $font-size-medium;
+              color: $color-text-d;
+            }
           }
         }
       }

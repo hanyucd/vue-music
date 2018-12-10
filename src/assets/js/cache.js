@@ -37,7 +37,7 @@ export function saveSearch(query) {
 };
 
 /*
- * 获取搜索缓存
+ * 获取搜索缓存 | 提供给 vuex 中 state 使用
  */
 export function getSearch() {
   return storage.get(SEARCH_KEY, []);
