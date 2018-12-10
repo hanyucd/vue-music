@@ -32,6 +32,8 @@
     <article class="search-result" v-show="query">
       <suggest :query="query" v-on:beforeScroll="blurInput" v-on:select="saveSearch"></suggest>
     </article>
+
+    <confirm ref="confirm" text="确定清空历史记录" v-on:confirm="confirm" v-on:cancel="cancel"></confirm>
   </div>
 </template>
 
@@ -39,6 +41,7 @@
 import SearchBox from '@/components/search_box/search_box';
 import Suggest from '@/components/suggest/suggest';
 import SearchList from '@/components/search_list/search_list';
+import Confirm from '@/components/confirm/confirm';
 
 import { getHotKey } from '@/api/search';
 import { mapActions, mapGetters } from 'vuex';
@@ -47,7 +50,8 @@ export default {
   components: {
     SearchBox,
     Suggest,
-    SearchList
+    SearchList,
+    Confirm
   },
   data() {
     return {
@@ -105,13 +109,22 @@ export default {
     deleteHistory(item) {
       this.deleteSearchHistory(item);
     },
+    /*
+     * 显示弹框
+     */
     showConfirm() {
+      this.$refs.confirm.show();
     },
     /*
     * 清空搜索历史
     */
     confirm() {
       this.clearSearchHistory();
+    },
+    /*
+    * 取消清空搜索历史
+    */
+    cancel() {
     }
   }
 };
