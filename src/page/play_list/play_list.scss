@@ -53,7 +53,7 @@
           flex: 0 0 20px;
           width: 20px;
           font-size: $font-size-small;
-          color: $color-theme-d;
+          color: $color-theme;
         }
         .text {
           flex: 1;
@@ -113,21 +113,17 @@
   }
   50% {
     transform: translate3d(0, -10%, 0);
-    opacity: .5;
+    opacity: .8;
   }
   100% {
     transform: translate3d(0, 0, 0);
     opacity: 1;
   }
 }
-
+// 调用动画
 .list-fade-enter-active {
   animation: def-animation .7s;
-  .list-wrapper {
-  }
 }
 .list-fade-leave-active {
   animation: def-animation .7s reverse;
-  .list-wrapper {
-  }
 }
