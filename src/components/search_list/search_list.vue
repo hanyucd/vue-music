@@ -1,7 +1,7 @@
 <template>
   <div id="search_list">
     <ul>
-      <li class="search-item" v-for="(item, index) of searches" :key="index" @click="selectItem(item)">
+      <li class="search-item" v-for="(item, index) of searches" :key="index" @click.stop="selectItem(item)">
         <span class="text">{{ item }}</span>
         <span class="icon" @click.stop="deleteItem(item)">
           <i class="icon-delete"></i>
@@ -44,7 +44,7 @@ export default {
       overflow: hidden;
       .text {
         flex: 1;
-        color: $color-text-l;
+        color: $color-text;
       }
       .icon {
         @include extend-click();

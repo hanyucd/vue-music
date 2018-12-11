@@ -129,7 +129,6 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex';
 // 导入子组件
 import ProgressBar from './progress_bar/progress_bar';
 import Scroll from '@/components/scroll/scroll';
@@ -138,6 +137,8 @@ import PlayList from '@/page/play_list/play_list';
 import { shuffle } from '@/assets/js/util';
 // 导入第三方库
 import Lyric from 'lyric-parser';
+
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
   components: {
@@ -222,6 +223,9 @@ export default {
       setPlayMode: 'SET_MODE',
       setPlayList: 'SET_PLAY_LIST'
     }),
+    ...mapActions([
+      'savePlayHistory'
+    ]),
     /*
      * 最小化播放器
      */
@@ -288,6 +292,8 @@ export default {
      */
     canplay() {
       this.songCanPlay = true;
+      // 调用 Actions
+      this.savePlayHistory(this.currentSong);
     },
     /*
      * 当播放器加载期间发生错误时 触发

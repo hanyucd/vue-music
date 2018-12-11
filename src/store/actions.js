@@ -3,7 +3,8 @@ import { shuffle } from '@/assets/js/util';
 import {
   saveSearch,
   deleteSearch,
-  clearSearch
+  clearSearch,
+  savePlay
 } from '@/assets/js/cache';
 
 /*
@@ -148,4 +149,11 @@ export const deleteSearchHistory = function({ commit }, query) {
  */
 export const clearSearchHistory = function({ commit }) {
   commit(types.SET_SEARCH_HISTORY, clearSearch());
+};
+
+/*
+ * 保存播放历史 | Actions
+ */
+export const savePlayHistory = function({ commit }, song) {
+  commit(types.SET_PLAY_HISTORY, savePlay(song));
 };

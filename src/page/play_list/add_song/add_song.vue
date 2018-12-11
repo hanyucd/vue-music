@@ -17,6 +17,20 @@
       <!-- 切换区块 -->
       <section class="shortcut" v-show="!query">
         <switch-table :switches="switches" :currentIndex="currentIndex" v-on:switch="switchTable"></switch-table>
+        <div class="list-wrapper">
+          <!-- 最近播放 -->
+          <scroll class="list-scroll" ref="songList" v-if="currentIndex === 0" :data="playHistory">
+            <div class="list-inner">
+              <song-list :songs="playHistory" v-on:select="selectSong"></song-list>
+            </div>
+          </scroll>
+          <!-- 搜索历史 -->
+          <scroll class="list-scroll" ref="searchList" v-if="currentIndex === 1" :data="searchHistory">
+            <div class="list-inner">
+              <search-list :searches="searchHistory" v-on:select="addQuery" v-on:delete="deleteSong"></search-list>
+            </div>
+          </scroll>
+        </div>
       </section>
 
       <!-- 搜索区块 -->
@@ -31,14 +45,21 @@
 import SearchBox from '@/components/search_box/search_box';
 import Suggest from '@/components/suggest/suggest';
 import SwitchTable from '@/components/switch_table/switch_table';
+import Scroll from '@/components/scroll/scroll';
+import SongList from '@/components/song_list/song_list';
+import SearchList from '@/components/search_list/search_list';
 
-import { mapActions } from 'vuex';
+import Song from '@/assets/js/song';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
     SearchBox,
     Suggest,
-    SwitchTable
+    SwitchTable,
+    Scroll,
+    SongList,
+    SearchList
   },
   data() {
     return {
@@ -52,12 +73,23 @@ export default {
       currentIndex: 0 // 当前切换开关
     };
   },
+  computed: {
+    ...mapGetters([
+      'playHistory',
+      'searchHistory'
+    ])
+  },
   methods: {
     ...mapActions([
-      'saveSearchHistory'
+      'saveSearchHistory',
+      'deleteSearchHistory',
+      'insertSong'
     ]),
     show() {
       this.showFlag = true;
+      setTimeout(() => {
+        this.currentIndex === 0 ? this.$refs.songList.refresh() : this.$refs.searchList.refresh();
+      }, 20);
     },
     hide() {
       this.showFlag = false;
@@ -70,6 +102,19 @@ export default {
      */
     switchTable(index) {
       this.currentIndex = index;
+    },
+    selectSong(song, index) {
+      if (index !== 0) {
+        // 调用 actions
+        this.insertSong(new Song(song));
+      }
+    },
+    addQuery(item) {
+      this.$refs.searchBox.setQuery(item);
+    },
+    deleteSong(item) {
+      // 调用 actions
+      this.deleteSearchHistory(item);
     },
     /*
      * 缓存搜索历史 | 调 Actions
