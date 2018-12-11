@@ -12,6 +12,8 @@ import RankDetail from '@/page/rank_detail/rank_detail'; // 排行榜详情页�
 
 import Search from '@/page/search/search'; // 搜索页面
 
+import User from '@/page/user/user'; // 用户页面
+
 Vue.use(Router);
 
 export default new Router({
@@ -68,6 +70,11 @@ export default new Router({
           component: SingerDetail
         }
       ]
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: User
     }
   ]
 });
