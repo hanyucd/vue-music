@@ -37,6 +37,13 @@
       <section class="search-result" v-show="query">
         <suggest :query="query" :zhida="zhida" v-on:select="selectSuggest"></suggest>
       </section>
+
+      <top-tip ref="topTip" :delay="2000">
+        <div class="tip-title">
+          <i class="icon-ok"></i>
+          <span class="text">已成功添加到播放列表</span>
+        </div>
+      </top-tip>
     </div>
   </transition>
 </template>
@@ -48,6 +55,7 @@ import SwitchTable from '@/components/switch_table/switch_table';
 import Scroll from '@/components/scroll/scroll';
 import SongList from '@/components/song_list/song_list';
 import SearchList from '@/components/search_list/search_list';
+import TopTip from './top_tip/top_tip';
 
 import Song from '@/assets/js/song';
 import { mapGetters, mapActions } from 'vuex';
@@ -59,7 +67,8 @@ export default {
     SwitchTable,
     Scroll,
     SongList,
-    SearchList
+    SearchList,
+    TopTip
   },
   data() {
     return {
@@ -108,6 +117,7 @@ export default {
         // 调用 actions
         this.insertSong(new Song(song));
       }
+      this.showTopTip();
     },
     addQuery(item) {
       this.$refs.searchBox.setQuery(item);
@@ -121,6 +131,13 @@ export default {
      */
     selectSuggest() {
       this.saveSearchHistory(this.query);
+      this.showTopTip();
+    },
+    /*
+     * 显示顶部提示窗
+     */
+    showTopTip() {
+      this.$refs.topTip.show();
     }
   }
 };
