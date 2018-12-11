@@ -28,7 +28,7 @@
         </scroll>
 
         <section class="list-operate">
-          <div class="add">
+          <div class="add" @click.stop="showAddSong">
             <i class="icon-add"></i>
             <span class="text">添加歌曲到队列</span>
           </div>
@@ -41,6 +41,8 @@
 
       <!-- 清空弹窗 -->
       <confirm ref="confirm" text="确定清空历史记录" v-on:confirm="confirmClear"></confirm>
+
+      <add-song ref="addSong"></add-song>
     </div>
   </transition>
 </template>
@@ -48,12 +50,14 @@
 <script>
 import Scroll from '@/components/scroll/scroll';
 import Confirm from '@/components/confirm/confirm';
+import AddSong from './add_song/add_song';
 import { mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
   components: {
     Scroll,
-    Confirm
+    Confirm,
+    AddSong
   },
   data() {
     return {
@@ -137,11 +141,17 @@ export default {
       this.$refs.confirm.show();
     },
     /*
-     * 确认清空
+     * 确认清空歌曲播放列表
      */
     confirmClear() {
       this.deleteSongList();
       this.hide();
+    },
+    /*
+     * 显示添加歌曲列表
+     */
+    showAddSong() {
+      this.$refs.addSong.show();
     }
   }
 };
