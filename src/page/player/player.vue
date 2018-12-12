@@ -86,7 +86,7 @@
             </div>
             <!-- 收藏 icon -->
             <div class="icon i-right">
-              <i class="icon icon-not-favorite"></i>
+              <i class="icon" :class="getFavoriteCls(currentSong)" @click="toggleFavoriteCls(currentSong)"></i>
             </div>
           </section>
         </div>
@@ -163,7 +163,8 @@ export default {
       'currentSong',
       'playing',
       'currentIndex',
-      'mode'
+      'mode',
+      'favoriteList'
     ]),
     // 计算出播放时长比例
     percent() {
@@ -224,7 +225,9 @@ export default {
       setPlayList: 'SET_PLAY_LIST'
     }),
     ...mapActions([
-      'savePlayHistory'
+      'savePlayHistory',
+      'saveFavoriteList',
+      'deleteFavoriteList'
     ]),
     /*
      * 最小化播放器
@@ -486,6 +489,27 @@ export default {
      */
     showPlayList() {
       this.$refs.playList.show();
+    },
+    /*
+     * 处理收藏 class 名
+     */
+    getFavoriteCls(song) {
+      return this._isFavorite(song) ? 'icon-favorite' : 'icon-not-favorite';
+    },
+    /*
+     * 切换是否收藏
+     */
+    toggleFavoriteCls(song) {
+      this._isFavorite(song) ? this.deleteFavoriteList(song) : this.saveFavoriteList(song);
+    },
+    /*
+     * 判断是否已收藏
+     */
+    _isFavorite(song) {
+      let index = this.favoriteList.findIndex(item => {
+        return song.id === item.id;
+      });
+      return index > -1;
     }
   }
 };

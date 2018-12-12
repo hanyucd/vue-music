@@ -17,8 +17,8 @@
             <li class="item" ref="songList" v-for="(item, index) of sequenceList" :key="index" @click.stop="selectItem(item, index)">
               <i class="current" :class="getCurrentIcon(item)"></i>
               <span class="text">{{ item.name }}</span>
-              <span class="like">
-                <i class="icon-not-favorite"></i>
+              <span class="like" @click.stop="toggleFavoriteCls(item)">
+                <i :class="getFavoriteCls(item)"></i>
               </span>
               <span class="delete" @click.stop="deleteOne(item)">
                 <i class="icon-delete"></i>
@@ -65,7 +65,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([ 'sequenceList', 'currentSong', 'mode', 'playlist' ])
+    ...mapGetters([ 'sequenceList', 'currentSong', 'mode', 'playlist', 'favoriteList' ])
   },
   watch: {
     currentSong(newSong, oldSong) {
@@ -82,7 +82,9 @@ export default {
     }),
     ...mapActions([
       'deleteSong',
-      'deleteSongList'
+      'deleteSongList',
+      'saveFavoriteList',
+      'deleteFavoriteList'
     ]),
     show() {
       this.showFlag = true;
@@ -152,6 +154,27 @@ export default {
      */
     showAddSong() {
       this.$refs.addSong.show();
+    },
+    /*
+     * 处理收藏 class 名
+     */
+    getFavoriteCls(song) {
+      return this._isFavorite(song) ? 'icon-favorite' : 'icon-not-favorite';
+    },
+    /*
+     * 切换是否收藏
+     */
+    toggleFavoriteCls(song) {
+      this._isFavorite(song) ? this.deleteFavoriteList(song) : this.saveFavoriteList(song);
+    },
+    /*
+     * 判断是否已收藏
+     */
+    _isFavorite(song) {
+      let index = this.favoriteList.findIndex(item => {
+        return song.id === item.id;
+      });
+      return index > -1;
     }
   }
 };
