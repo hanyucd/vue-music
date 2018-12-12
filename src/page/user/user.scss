@@ -48,7 +48,7 @@
     position: absolute;
     top: 110px;
     bottom: 0;
-    width: 0;
+    width: 100%;
     .list-scroll {
       height: 100%;
       overflow: hidden;
@@ -60,8 +60,8 @@
   .no-result-wrapper {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
-    width: 100%;
+    left: 50%;
+    transform: translate(-50%);
   }
 }
 
