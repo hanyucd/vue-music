@@ -8,6 +8,11 @@ import store from './store';
 import fastclick from 'fastclick';
 import VueLazyload from 'vue-lazyload';
 
+// 移动端调试工具，在移动端输出日志
+// import VConsole from 'vconsole';
+/* eslint-disable no-unused-vars */
+// let v = new VConsole();
+
 fastclick.attach(document.body);
 
 Vue.config.productionTip = false;
