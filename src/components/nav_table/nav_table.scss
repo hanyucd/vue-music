@@ -10,6 +10,8 @@
     flex: 1;
     text-align: center;
     .nav-title {
+      display: inline-block;
+      width: 100%;
       color: $color-text-l;
     }
   }
