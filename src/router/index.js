@@ -1,18 +1,20 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+/*
+ * 路由懒加载 | 异步加载组件
+ */
+const Recommend = () => import('@/page/recommend/recommend'); // 推荐页面
+const RecommendSongList = () => import('@/page/recommend_songList/recommend_songList'); // 推荐歌单详情页面
 
-import Recommend from '@/page/recommend/recommend'; // 推荐页面
-import RecommendSongList from '@/page/recommend_songList/recommend_songList'; // 推荐歌单详情页面
+const Singer = () => import('@/page/singer/singer'); // 歌手页面
+const SingerDetail = () => import('@/page/singer_detail/singer_detail'); // 歌手详情页面
 
-import Singer from '@/page/singer/singer'; // 歌手页面
-import SingerDetail from '@/page/singer_detail/singer_detail'; // 歌手详情页面
+const Rank = () => import('@/page/rank/rank'); // 排行榜页面
+const RankDetail = () => import('@/page/rank_detail/rank_detail'); // 排行榜详情页面
 
-import Rank from '@/page/rank/rank'; // 排行榜页面
-import RankDetail from '@/page/rank_detail/rank_detail'; // 排行榜详情页面
+const Search = () => import('@/page/search/search'); // 搜索页面
 
-import Search from '@/page/search/search'; // 搜索页面
-
-import User from '@/page/user/user'; // 用户页面
+const User = () => import('@/page/user/user'); // 用户页面
 
 Vue.use(Router);
 
