@@ -4,7 +4,9 @@ import {
   saveSearch,
   deleteSearch,
   clearSearch,
-  savePlay
+  savePlay,
+  saveFavorite,
+  deleteFavorite
 } from '@/assets/js/cache';
 
 /*
@@ -156,4 +158,17 @@ export const clearSearchHistory = function({ commit }) {
  */
 export const savePlayHistory = function({ commit }, song) {
   commit(types.SET_PLAY_HISTORY, savePlay(song));
+};
+
+/**
+ * 保存收藏歌曲 | Actions
+ */
+export const saveFavoriteList = function ({ commit }, song) {
+  commit(types.SET_FAVORITE_LIST, saveFavorite(song));
+};
+/*
+ * 删除单个收藏 | Actions
+ */
+export const removeFavorite = function ({ commit }, song) {
+  commit(types.SET_FAVORITE_LIST, deleteFavorite(song));
 };

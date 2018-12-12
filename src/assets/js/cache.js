@@ -11,7 +11,13 @@ const SEARCH_MAX_LENGTH = 15;
 
 // 设置 歌曲播放 key
 const PLAY_KEY = '__PLAY__';
+// 歌曲播放最多缓存 50 条
 const PLAY_MAX_LENGTH = 50;
+
+// 设置 收藏 key
+const FAVORITE_KEY = '__favorite__';
+// 收藏最多缓存 50 条
+const FAVORITE_MAX_LENGTH = 50;
 
 /*
  * 封装内部方法 | 插入数据到第一个 并 删除重复值
@@ -39,7 +45,7 @@ function deleteFromArray(arr, compare) {
   }
 }
 
-/*
+/**
  * 设置 搜索历史缓存
  */
 export function saveSearch(query) {
@@ -51,12 +57,6 @@ export function saveSearch(query) {
   storage.set(SEARCH_KEY, searches);
 
   return searches;
-};
-/*
- * 获取搜索历史缓存 | 提供给 vuex 中 state 使用
- */
-export function getSearch() {
-  return storage.get(SEARCH_KEY, []);
 };
 /*
  * 删除 单条搜索历史缓存
@@ -77,13 +77,19 @@ export function clearSearch() {
   storage.remove(SEARCH_KEY);
   return [];
 };
-
 /*
+ * 获取搜索历史缓存 | 提供给 vuex 中 state 使用
+ */
+export function getSearch() {
+  return storage.get(SEARCH_KEY, []);
+};
+
+/**
  * 设置 播放历史缓存
  */
 export function savePlay(song) {
   let songs = storage.get(PLAY_KEY, []);
-  inseartArray(songs, song, item => {
+  inseartArray(songs, song, (item) => {
     return item.id === song.id;
   }, PLAY_MAX_LENGTH);
 
@@ -96,4 +102,36 @@ export function savePlay(song) {
  */
 export function getPlay() {
   return storage.get(PLAY_KEY, []);
+};
+
+/**
+ * 设置 收藏歌曲缓存
+ */
+export function saveFavorite(song) {
+  let songs = storage.get(FAVORITE_KEY, []);
+  inseartArray(songs, song, (item) => {
+    return item.id === song.id;
+  }, FAVORITE_MAX_LENGTH);
+
+  storage.set(FAVORITE_KEY, songs);
+
+  return songs;
+};
+/*
+ * 删除单个收藏
+ */
+export function deleteFavorite(song) {
+  let songs = storage.get(FAVORITE_KEY, []);
+  deleteFromArray(songs, (item) => {
+    return item.id === song.id;
+  });
+
+  storage.set(FAVORITE_KEY, []);
+  return songs;
+};
+/*
+ * 获取收藏缓存 | 提供给 vuex 中 state 使用
+ */
+export function getFavorite() {
+  return storage.get(FAVORITE_KEY, []);
 };
